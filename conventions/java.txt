@@ -1,0 +1,58 @@
+SpenderBender: A free offline budget tracking tool.
+Copyright (C) 2016  Christopher R Reyes
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+
+Created by Christopher R Reyes: 06/04/2016
+
+---
+
+Below are conventions for Java code. These conventions have been mostly derived from the Android Code Style for Contributors: https://source.android.com/source/code-style.html#java-language-rules. If something is not covered explicitly here, please follow Android Code Style Java conventions.
+
+Copyright and Contributions
+	All Java files should contain the standard copyright notice above, enclosed in Java style block comments.
+		This should be at the very top of the file (above import statements). It should not be indented.
+		/*
+		 * SpenderBender: ...
+		 * ...
+		 */
+	In the Javadoc comments for the top level class or interface in each file, you should include the list of contributors.
+		If you are creating the file for the first time, add a line to the bottom of the comments in the form:
+			* Created by {Your Name}: {Date in MM/DD/YYYY Format}
+		If you are the first non-creator contributor to the file, immediately underneath the "Created by" line, add:
+			* Contributors:
+			* {Your Name}
+		If you are contributing to a file for the first time and the file already has a contributor list, add your name on a separate line to the list.
+			Sort the list alphabetically, uppercased letters before lowercased ones, and spaces before letters.
+
+Java Files
+	Each Java file should contain one and only one top-level class or interface, with a name that matches the filename.
+	For example, a java file "Foo.java" should have exactly one top level class: "Foo".
+
+Classes
+	Class names should always be singular nouns.
+	They should use UpperCamelCase.
+	For classes that extend Android components, the name should end with the component type.
+	For example: FooActivity, BarFragment, BazLoader, etc.
+	Each class should have Javadoc standard comments describing what the class does
+
+Interfaces
+	Interface names should always be adjectives, preferably ending in "able".
+	For example, you might have a "Drivable" interface which is implemented by classes such as "Car" or "Motorcycle".
+	Each interface should have Javadoc standard comments describing what the interface does
+
+Indentation
+	Spaces should be used instead of tabs, per AndroidStudio default setup. Use 4 spaces for a tab, and 8 spaces for the continuation of a previous line.

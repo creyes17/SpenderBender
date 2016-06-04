@@ -1,10 +1,3 @@
-# SpenderBender
-Free Offline Budget Tracking App for Android
-
-Please see the conventions folder for code and style conventions if you'd like to contribute.
-
-License:
-```
 SpenderBender: A free offline budget tracking tool.
 Copyright (C) 2016  Christopher R Reyes
 
@@ -20,4 +13,18 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-```
+
+---
+
+Created by Christopher R Reyes: 06/04/2016
+
+---
+
+Below are conventions for all drawable Android resources.
+
+File Naming:
+	Drawable resources should be named using snake_case (all lowercased with words separated by underscores).
+	They should be prefixed by their asset type:
+		Button: "button_"
+		Icon: "icon_"
+	If you find yourself needing to add a drawable resource for an asset type not listed above, please add it to the list.
