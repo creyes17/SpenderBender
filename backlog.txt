@@ -1,11 +1,13 @@
-Up Navigation: As a user, I want to be able to navigate back through the app to the home screen efficiently.
+Cruddy Categories: As a user, I want to be able to Create, Read, Update, and Delete categories in which to organize my spending.
+Cruddy Expenses: As a user, I want to be able to Create, Read, Update, and Delete expenses that I incur.
+Categorized Expenses: As a user, I want to be able to associate my expenses with various categories.
 Expense Dates: As a user, I want to be able to know not just what I spend, but when I spend it.
-Time-bound Category-based Reporting: As a user, I want to know how much I spend on different categories over different time periods
-Time-bound Category Budgeting: As a user, I want to set goals for myself around spending on different categories
-Trending over Time: As a user, I want to look back at the goals I've set for myself and how close I came to achieving them or not
-Elegant Navigation: As a user, I want to be able to quickly navigate to the portions of the app that interest me most for this session
-Expense Widget: As a user, I want to be able to enter a new expense extremely quickly, overcoming the barrier of opening/loading the app
-Customizable Reporting Widget: As a user, I want a quick snapshot of how well I'm doing against my various goals
+Time-bound Category-based Reporting: As a user, I want to know how much I spend on different categories over different time periods.
+Time-bound Category Budgeting: As a user, I want to set goals for myself around spending on different categories.
+Trending over Time: As a user, I want to look back at the goals I've set for myself and how close I came to achieving them or not.
+Elegant Navigation: As a user, I want to be able to quickly navigate to the portions of the app that interest me most for this session.
+Expense Widget: As a user, I want to be able to enter a new expense extremely quickly, overcoming the barrier of opening/loading the app.
+Customizable Reporting Widget: As a user, I want a quick snapshot of how well I'm doing against my various goals.
 Funds Estimations: As a user, I want to estimate how much money I have to start with in a particular time period, as well as how much money I expect to have at the end.
 Account Linking: As a user, I want to be able to link to my bank accounts to automatically keep track of expenditures.
-Automatic Receipt Reading: As a user, I want to be able to scan a receipt and have it automatically populate a new expense
+Automatic Receipt Reading: As a user, I want to be able to scan a receipt and have it automatically populate a new expense.
