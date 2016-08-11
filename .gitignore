@@ -37,3 +37,5 @@ captures/
 
 # Open files in vim
 *.swp
+
+.externalNativeBuild
