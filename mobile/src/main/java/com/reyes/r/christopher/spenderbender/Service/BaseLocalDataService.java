@@ -17,16 +17,15 @@
  *
  */
 
-package com.reyes.r.christopher.spenderbender;
+package com.reyes.r.christopher.spenderbender.Service;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+/**
+ * Created by Christopher R Reyes on 7/16/16.
+ *
+ * This is the base class from which any local data service should inherit.
+ * It takes care of any data store transactions for you so that you can just focus on the data you
+ * actually want to store.
+ */
+public abstract class BaseLocalDataService {
 
-public class AddExpenseActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_expense);
-    }
 }
