@@ -16,20 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package reyes.r.christopher.spenderbender;
-
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+package reyes.r.christopher.spenderbender.service;
 
 /**
- * Example local unit test, which will execute on the development machine (host).
+ * Created by Christopher R Reyes on 8/11/16.
  *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * Manages the local data store(s) on the device
  */
-public class ExampleUnitTest {
-    @Test
-    public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
-    }
+
+public class LocalDataService {
 }
