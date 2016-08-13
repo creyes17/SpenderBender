@@ -16,13 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package reyes.r.christopher.spenderbender.service;
+package reyes.r.christopher.spenderbender.persistence;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
- * Created by Christopher R Reyes on 8/11/16.
- *
- * Manages the local data store(s) on the device
+ * Created by Christopher R Reyes on 8/13/16.
  */
+public class LocalDatabaseHandlerTest {
+    @Test
+    public void canGenerateCreateStatementForTableName() throws Exception {
+        String tablename = "foo";
 
-public class LocalDataService {
+        String expectedCreateStatement = "create table if not exists " + tablename + " ( _id int primary key autoincrement );";
+
+        Assert.assertEquals("Create statement doesn't work for input with just table name", LocalDatabaseHandler.generateCreateStatement(tablename), expectedCreateStatement);
+    }
+
 }
