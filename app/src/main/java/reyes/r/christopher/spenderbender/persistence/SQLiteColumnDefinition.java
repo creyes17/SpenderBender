@@ -123,7 +123,7 @@ class SQLiteColumnDefinition {
         return name;
     }
 
-    Boolean getPrimaryKey() {
+    Boolean getIsPrimaryKey() {
         return isPrimaryKey;
     }
 

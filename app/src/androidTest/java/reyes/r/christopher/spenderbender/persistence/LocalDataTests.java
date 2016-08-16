@@ -18,22 +18,42 @@
 
 package reyes.r.christopher.spenderbender.persistence;
 
+import android.content.Context;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
 /**
  * Created by Christopher R Reyes on 8/13/16.
  */
-public class LocalDatabaseHandlerTest {
+@RunWith(AndroidJUnit4.class)
+public class LocalDataTests {
     @Test
-    public void canGenerateCreateStatementForTableName() throws Exception {
-        String tablename = "foo";
+    public void useAppContext() throws Exception {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getTargetContext();
 
-        String expectedCreateStatement = "create table if not exists " + tablename + " ( _id int primary key autoincrement );";
+        assertEquals("reyes.r.christopher.spenderbender", appContext.getPackageName());
+    }
 
-        Assert.assertEquals("Create statement doesn't work for input with just table name", LocalDatabaseHandler.generateCreateStatement(tablename), expectedCreateStatement);
+    @Test
+    public void databaseCreationTests() throws Exception {
+
+        // XXX Placeholder
+        Assert.assertTrue(Boolean.TRUE);
+
+        // As part of the setup, backup the existing database (if it exists), and then delete it
+
+        // After creating the database, a new database file should exist with the right file name
+
+        // The created database should have a transaction table
+
+        // Test idempotency of onCreate()
     }
 
 }

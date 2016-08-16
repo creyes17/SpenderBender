@@ -1,0 +1,45 @@
+/*
+ * SpenderBender: A free offline budget tracking tool.
+ * Copyright (c) 2016 Christopher R Reyes
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package reyes.r.christopher.spenderbender.persistence;
+
+import junit.framework.Assert;
+
+import org.junit.Test;
+
+/**
+ * Created by Christopher R Reyes on 8/15/16.
+ */
+public class SQLiteColumnDefinitionTest {
+    @Test
+    public void test_toString() throws Exception {
+
+    }
+
+    @Test
+    public void standardPrimaryKey() throws Exception {
+        // The standard Android primary key should be an "_id" column and an Integer
+        SQLiteColumnDefinition primaryKey = SQLiteColumnDefinition.StandardPrimaryKey();
+
+        Assert.assertNotNull("Primary Key should not be null", primaryKey);
+        Assert.assertEquals("Primary key should be '_id'", "_id", primaryKey.getName());
+        Assert.assertTrue("Primary Key should be indicated as a Primary key", primaryKey.getIsPrimaryKey());
+        Assert.assertEquals("Primary Key should be an Integer type", SQLiteColumnDefinition.DataType.INT, primaryKey.getType());
+    }
+
+}
