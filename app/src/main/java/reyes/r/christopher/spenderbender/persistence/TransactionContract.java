@@ -27,7 +27,7 @@ import java.util.ArrayList;
  */
 
 class TransactionContract {
-    static final String TableName = "transaction";
+    static final String TableName = "financialtransaction";
 
     static final SQLiteColumnDefinition PrimaryKey = SQLiteColumnDefinition.StandardPrimaryKey();
     static final SQLiteColumnDefinition TransactionName = new SQLiteColumnDefinition(
@@ -47,7 +47,7 @@ class TransactionContract {
             Boolean.TRUE                            // isNotNull
     );
     static final SQLiteColumnDefinition DateIncurred = new SQLiteColumnDefinition(
-            "amount",                               // Column Name
+            "incurreddate",                               // Column Name
             SQLiteColumnDefinition.DataType.TEXT,   // Type
             Boolean.FALSE,                          // isPrimaryKey
             Boolean.FALSE,                          // doesAutoIncrement

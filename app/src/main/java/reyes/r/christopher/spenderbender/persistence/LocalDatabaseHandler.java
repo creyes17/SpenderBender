@@ -30,11 +30,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class LocalDatabaseHandler extends SQLiteOpenHelper {
 
-    private static final String DatabaseName = "SpenderBenderSQLiteDB";
-    private static final int DatabaseVersion = 1;
+    static final String DatabaseName = "SpenderBenderSQLiteDB";
+    static final int DatabaseVersion = 1;
 
-    public LocalDatabaseHandler(Context context, SQLiteDatabase.CursorFactory factory) {
-        super(context, DatabaseName, factory, DatabaseVersion);
+    public LocalDatabaseHandler(Context context) {
+        super(context, DatabaseName, null, DatabaseVersion);
     }
 
     @Override

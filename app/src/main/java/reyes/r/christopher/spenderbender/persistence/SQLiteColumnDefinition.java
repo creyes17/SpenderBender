@@ -134,7 +134,7 @@ class SQLiteColumnDefinition {
      */
     private static Map<DataType, String> generateDataTypeStringMap() {
         HashMap<DataType, String> conversion = new HashMap<>();
-        conversion.put(DataType.INT, "INT");
+        conversion.put(DataType.INT, "INTEGER");
         conversion.put(DataType.REAL, "REAL");
         conversion.put(DataType.TEXT, "TEXT");
 
