@@ -104,35 +104,28 @@ class SQLiteColumnDefinition {
         this(name, type, null, null, null, null);
     }
 
-    /**
-     * Generates a new immutable SQLiteColumnDefinition
-     *
-     * @param name - The name of the column
-     * @param type - The DataType of the column
-     * @param isNotNull - Is this a required column?
-     */
-    SQLiteColumnDefinition(String name, DataType type, @Nullable Boolean isNotNull) {
-        this(name, type, null, null, null, isNotNull);
-    }
-
     DataType getType() {
-        return type;
+        return this.type;
     }
 
     String getName() {
-        return name;
+        return this.name;
     }
 
     Boolean getIsPrimaryKey() {
-        return isPrimaryKey;
+        return this.isPrimaryKey;
     }
 
     Boolean getDoesAutoIncrement() {
-        return doesAutoIncrement;
+        return this.doesAutoIncrement;
     }
 
     Boolean getIsUnique() {
-        return isUnique;
+        return this.isUnique;
+    }
+
+    Boolean getIsNotNull() {
+        return this.isNotNull;
     }
 
     /**
