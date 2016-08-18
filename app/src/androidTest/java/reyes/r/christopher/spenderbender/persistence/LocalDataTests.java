@@ -21,16 +21,22 @@ package reyes.r.christopher.spenderbender.persistence;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.RenamingDelegatingContext;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.Locale;
+
+import reyes.r.christopher.spenderbender.model.ExpenseModel;
 
 import static org.junit.Assert.*;
 
@@ -41,6 +47,39 @@ import static org.junit.Assert.*;
  */
 @RunWith(AndroidJUnit4.class)
 public class LocalDataTests {
+    private LocalDatabaseHandler databaseHandler;
+
+    private LocalDatabaseHandler createTestDatabase(String prefix) throws Exception {
+        Context testContext = new RenamingDelegatingContext(InstrumentationRegistry.getTargetContext(), prefix);
+
+        File previousTestDatabaseIfExists = testContext.getDatabasePath(LocalDatabaseHandler.DatabaseName);
+
+        // As part of the setup, backup the existing database (if it exists), and then delete it
+
+        Assert.assertTrue("Make sure we're working with a test database", previousTestDatabaseIfExists.getName().matches("^\\s*" + prefix + ".*$"));
+        Assert.assertNotEquals("Make sure we haven't accidentally modified our tests to make the real database the test database", LocalDatabaseHandler.DatabaseName.toUpperCase(Locale.getDefault()), previousTestDatabaseIfExists.getName().toUpperCase(Locale.getDefault()));
+
+        if ( previousTestDatabaseIfExists.exists() ) {
+            Assert.assertTrue("Delete failed for previous test database", previousTestDatabaseIfExists.delete());
+        }
+
+        Assert.assertFalse("Prior database file should not exist before we start testing with it", previousTestDatabaseIfExists.exists());
+
+        return new LocalDatabaseHandler(testContext);
+    }
+
+    @Before
+    public void setUp() throws Exception {
+        String testPrefix = "localDataTest_";
+
+        this.databaseHandler = createTestDatabase(testPrefix);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        this.databaseHandler.close();
+        this.databaseHandler = null;
+    }
 
     @Test
     public void useAppContext() throws Exception {
@@ -53,27 +92,18 @@ public class LocalDataTests {
     @Test
     public void databaseCreationTests() throws Exception {
 
-        String testPrefix = "localDataTest_";
-        Context testContext = new RenamingDelegatingContext(InstrumentationRegistry.getTargetContext(), testPrefix);
+        String testPrefix = "localDataTest_creation_";
 
-        // XXX Placeholder
-        Assert.assertTrue(Boolean.TRUE);
-
-        File previousTestDatabaseIfExists = testContext.getDatabasePath(LocalDatabaseHandler.DatabaseName);
-
-        // As part of the setup, backup the existing database (if it exists), and then delete it
-
-        Assert.assertTrue("Make sure we're working with a test database", previousTestDatabaseIfExists.getName().matches("^\\s*" + testPrefix + ".*$"));
-
-        if ( previousTestDatabaseIfExists.exists() ) {
-            Assert.assertTrue("Delete failed for previous test database", previousTestDatabaseIfExists.delete());
-        }
-
-        Assert.assertFalse("Prior database file should not exist before we start testing onCreate", previousTestDatabaseIfExists.exists());
-
-        LocalDatabaseHandler testDbh = new LocalDatabaseHandler(testContext);
+        LocalDatabaseHandler testDbh = createTestDatabase(testPrefix);
 
         SQLiteDatabase testDb = testDbh.getReadableDatabase();
+
+        // TODO: 8/18/16 This is bad form. I wanted to modularize the creation of a test database so I could save code between here and the setUp method, but that means I have to manually re-create the database path name here to run the next test
+        // Should we just write that test database creation code twice?
+        // The reason this is bad is that it assumes something about how the createTestDatabase method is implemented (namely that it's using this RenamingDelegatingContext)
+        Context testContext = new RenamingDelegatingContext(InstrumentationRegistry.getTargetContext(), testPrefix);
+
+        File previousTestDatabaseIfExists = testContext.getDatabasePath(LocalDatabaseHandler.DatabaseName);
 
         // After creating the database, a new database file should exist with the right file name
 
@@ -136,6 +166,27 @@ public class LocalDataTests {
 
         testDb.close();
         testDbh.close();
+    }
+
+    @Test
+    public void canSaveExpense() {
+        SQLiteDatabase db = this.databaseHandler.getWritableDatabase();
+
+        SQLiteStatement countStar = db.compileStatement("Select count(*) from " + TransactionContract.TableName);
+
+        Assert.assertEquals("Should start with 0 rows", 0, countStar.simpleQueryForLong());
+
+        ExpenseModel expenseModel1 = new ExpenseModel(
+                "Korean BBQ",   // name
+                21.22,          // amount
+                2016,           // year incurred
+                8,              // month incurred
+                22              // day incurred
+        );
+
+        Assert.assertNotEquals("Can save Expense Model to database", (long) -1, (long) this.databaseHandler.saveExpense(expenseModel1, db));
+
+        Assert.assertEquals("Saving expense creates a new row in the transaction table", 1, countStar.simpleQueryForLong());
     }
 
 }

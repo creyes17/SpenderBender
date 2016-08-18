@@ -29,8 +29,8 @@ import java.util.ArrayList;
 class TransactionContract {
     static final String TableName = "financialtransaction";
 
-    private static final SQLiteColumnDefinition PrimaryKey = SQLiteColumnDefinition.StandardPrimaryKey();
-    private static final SQLiteColumnDefinition TransactionName = new SQLiteColumnDefinition(
+    static final SQLiteColumnDefinition PrimaryKey = SQLiteColumnDefinition.StandardPrimaryKey();
+    static final SQLiteColumnDefinition TransactionName = new SQLiteColumnDefinition(
             "name",                                 // Column Name
             SQLiteColumnDefinition.DataType.TEXT,   // Type
             Boolean.FALSE,                          // isPrimaryKey
@@ -38,7 +38,7 @@ class TransactionContract {
             Boolean.FALSE,                          // isUnique
             Boolean.TRUE                            // isNotNull
     );
-    private static final SQLiteColumnDefinition Amount = new SQLiteColumnDefinition(
+    static final SQLiteColumnDefinition Amount = new SQLiteColumnDefinition(
             "amount",                               // Column Name
             SQLiteColumnDefinition.DataType.REAL,   // Type
             Boolean.FALSE,                          // isPrimaryKey
@@ -46,7 +46,7 @@ class TransactionContract {
             Boolean.FALSE,                          // isUnique
             Boolean.TRUE                            // isNotNull
     );
-    private static final SQLiteColumnDefinition YearIncurred = new SQLiteColumnDefinition(
+    static final SQLiteColumnDefinition YearIncurred = new SQLiteColumnDefinition(
             "incurredyear",                         // Column Name
             SQLiteColumnDefinition.DataType.INT,    // Type
             Boolean.FALSE,                          // isPrimaryKey
@@ -54,7 +54,7 @@ class TransactionContract {
             Boolean.FALSE,                          // isUnique
             Boolean.TRUE                            // isNotNull
     );
-    private static final SQLiteColumnDefinition MonthIncurred = new SQLiteColumnDefinition(
+    static final SQLiteColumnDefinition MonthIncurred = new SQLiteColumnDefinition(
             "incurredmonth",                        // Column Name
             SQLiteColumnDefinition.DataType.INT,    // Type
             Boolean.FALSE,                          // isPrimaryKey
@@ -62,7 +62,7 @@ class TransactionContract {
             Boolean.FALSE,                          // isUnique
             Boolean.TRUE                            // isNotNull
     );
-    private static final SQLiteColumnDefinition DayIncurred = new SQLiteColumnDefinition(
+    static final SQLiteColumnDefinition DayIncurred = new SQLiteColumnDefinition(
             "incurredday",                          // Column Name
             SQLiteColumnDefinition.DataType.INT,    // Type
             Boolean.FALSE,                          // isPrimaryKey
@@ -70,7 +70,7 @@ class TransactionContract {
             Boolean.FALSE,                          // isUnique
             Boolean.TRUE                            // isNotNull
     );
-    private static final SQLiteColumnDefinition YearCreated = new SQLiteColumnDefinition(
+    static final SQLiteColumnDefinition YearCreated = new SQLiteColumnDefinition(
             "createdyear",                          // Column Name
             SQLiteColumnDefinition.DataType.INT,    // Type
             Boolean.FALSE,                          // isPrimaryKey
@@ -78,7 +78,7 @@ class TransactionContract {
             Boolean.FALSE,                          // isUnique
             Boolean.TRUE                            // isNotNull
     );
-    private static final SQLiteColumnDefinition MonthCreated = new SQLiteColumnDefinition(
+    static final SQLiteColumnDefinition MonthCreated = new SQLiteColumnDefinition(
             "createdmonth",                         // Column Name
             SQLiteColumnDefinition.DataType.INT,    // Type
             Boolean.FALSE,                          // isPrimaryKey
@@ -86,7 +86,7 @@ class TransactionContract {
             Boolean.FALSE,                          // isUnique
             Boolean.TRUE                            // isNotNull
     );
-    private static final SQLiteColumnDefinition DayCreated = new SQLiteColumnDefinition(
+    static final SQLiteColumnDefinition DayCreated = new SQLiteColumnDefinition(
             "createdday",                           // Column Name
             SQLiteColumnDefinition.DataType.INT,    // Type
             Boolean.FALSE,                          // isPrimaryKey
