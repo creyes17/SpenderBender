@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Locale;
 
@@ -177,16 +178,126 @@ public class LocalDataTests {
         Assert.assertEquals("Should start with 0 rows", 0, countStar.simpleQueryForLong());
 
         ExpenseModel expenseModel1 = new ExpenseModel(
-                "Korean BBQ",   // name
-                21.22,          // amount
-                2016,           // year incurred
-                8,              // month incurred
-                22              // day incurred
+                "Korean BBQ",       // name
+                21.22,              // amount
+                2016,               // year incurred
+                Calendar.AUGUST,    // month incurred
+                22                  // day incurred
         );
 
-        Assert.assertNotEquals("Can save Expense Model to database", (long) -1, (long) this.databaseHandler.saveExpense(expenseModel1, db));
+        long expense1Id = this.databaseHandler.saveExpense(expenseModel1, db);
+
+        Assert.assertNotEquals("Can save Expense Model to database", -1, expense1Id);
 
         Assert.assertEquals("Saving expense creates a new row in the transaction table", 1, countStar.simpleQueryForLong());
+
+        ExpenseModel expenseModel2 = new ExpenseModel(
+                "Lumiere Restaurant",   // name
+                201.39,                 // amount
+                2014,                   // year incurred
+                Calendar.FEBRUARY,      // month incurred
+                22                      // day incurred
+        );
+
+        long expense2Id = this.databaseHandler.saveExpense(expenseModel2, db);
+
+        Assert.assertNotEquals("Can save other expense to database", -1, expense2Id);
+
+        Assert.assertEquals("Saving expense creates another new row in the transaction table", 2, countStar.simpleQueryForLong());
+
+        // Check that rows in the database match the expenses we tried to save
+
+        Cursor expenses = db.query(TransactionContract.TableName, null, null, null, null, null, null);
+
+        Assert.assertTrue("Cursor moves to first", expenses.moveToFirst());
+
+        while ( ! expenses.isAfterLast() ) {
+            long primaryKey = expenses.getLong(
+                    expenses.getColumnIndexOrThrow(
+                            TransactionContract.PrimaryKey.getName()
+                    )
+            );
+
+            String name = expenses.getString(
+                    expenses.getColumnIndexOrThrow(
+                            TransactionContract.TransactionName.getName()
+                    )
+            );
+
+            double amount = expenses.getDouble(
+                    expenses.getColumnIndexOrThrow(
+                            TransactionContract.Amount.getName()
+                    )
+            );
+
+            int yearIncurred = expenses.getInt(
+                    expenses.getColumnIndexOrThrow(
+                            TransactionContract.YearIncurred.getName()
+                    )
+            );
+
+            int monthIncurred = expenses.getInt(
+                    expenses.getColumnIndexOrThrow(
+                            TransactionContract.MonthIncurred.getName()
+                    )
+            );
+
+            int dayIncurred = expenses.getInt(
+                    expenses.getColumnIndexOrThrow(
+                            TransactionContract.DayIncurred.getName()
+                    )
+            );
+
+            int yearCreated = expenses.getInt(
+                    expenses.getColumnIndexOrThrow(
+                            TransactionContract.YearCreated.getName()
+                    )
+            );
+
+            int monthCreated = expenses.getInt(
+                    expenses.getColumnIndexOrThrow(
+                            TransactionContract.MonthCreated.getName()
+                    )
+            );
+
+            int dayCreated = expenses.getInt(
+                    expenses.getColumnIndexOrThrow(
+                            TransactionContract.DayCreated.getName()
+                    )
+            );
+
+            Assert.assertTrue("Row ID matches expense 1 or 2", (( primaryKey == expense1Id ) || ( primaryKey == expense2Id )));
+
+            ExpenseModel modelToCompare;
+
+            if(
+                    expense1Id == expenses.getLong(
+                        expenses.getColumnIndex(
+                                TransactionContract.PrimaryKey.getName()
+                        )
+                    )
+            ) {
+                modelToCompare = expenseModel1;
+            }
+            else {
+                modelToCompare = expenseModel2;
+            }
+
+            Assert.assertEquals("Saved expense name correctly", modelToCompare.getName(), name);
+            Assert.assertEquals("Saved expense amount correctly", modelToCompare.getAmount(), amount, 0.01);
+            Assert.assertEquals("Saved expense Year Incurred correctly", modelToCompare.getYearIncurred(), yearIncurred);
+            Assert.assertEquals("Saved expense Month Incurred correctly", modelToCompare.getMonthIncurred(), monthIncurred);
+            Assert.assertEquals("Saved expense Day Incurred correctly", modelToCompare.getDayIncurred(), dayIncurred);
+            Assert.assertEquals("Saved expense Year Created correctly", modelToCompare.getYearCreated(), yearCreated);
+            Assert.assertEquals("Saved expense Month Created correctly", modelToCompare.getMonthCreated(), monthCreated);
+            Assert.assertEquals("Saved expense Day Created correctly", modelToCompare.getDayCreated(), dayCreated);
+
+            expenses.moveToNext();
+        }
+
+        countStar.close();
+        expenses.close();
+        db.close();
     }
 
 }
