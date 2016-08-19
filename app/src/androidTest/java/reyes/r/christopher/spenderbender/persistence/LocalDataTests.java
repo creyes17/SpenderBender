@@ -185,7 +185,7 @@ public class LocalDataTests {
                 22                  // day incurred
         );
 
-        long expense1Id = this.databaseHandler.saveExpense(expenseModel1, db);
+        long expense1Id = LocalDatabaseHandler.saveExpense(expenseModel1, db);
 
         Assert.assertNotEquals("Can save Expense Model to database", -1, expense1Id);
 
@@ -199,7 +199,7 @@ public class LocalDataTests {
                 22                      // day incurred
         );
 
-        long expense2Id = this.databaseHandler.saveExpense(expenseModel2, db);
+        long expense2Id = LocalDatabaseHandler.saveExpense(expenseModel2, db);
 
         Assert.assertNotEquals("Can save other expense to database", -1, expense2Id);
 
