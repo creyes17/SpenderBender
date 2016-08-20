@@ -284,7 +284,7 @@ public class LocalDataTests {
             }
 
             Assert.assertEquals("Saved expense name correctly", modelToCompare.getName(), name);
-            Assert.assertEquals("Saved expense amount correctly", modelToCompare.getAmount(), amount, 0.01);
+            Assert.assertEquals("Saved expense amount correctly", modelToCompare.getAmount(), amount, 0.001);
             Assert.assertEquals("Saved expense Year Incurred correctly", modelToCompare.getYearIncurred(), yearIncurred);
             Assert.assertEquals("Saved expense Month Incurred correctly", modelToCompare.getMonthIncurred(), monthIncurred);
             Assert.assertEquals("Saved expense Day Incurred correctly", modelToCompare.getDayIncurred(), dayIncurred);

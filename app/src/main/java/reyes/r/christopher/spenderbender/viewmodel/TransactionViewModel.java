@@ -18,52 +18,34 @@
 
 package reyes.r.christopher.spenderbender.viewmodel;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.cglib.core.Local;
+import android.databinding.BaseObservable;
 
 import reyes.r.christopher.spenderbender.model.ExpenseModel;
 import reyes.r.christopher.spenderbender.persistence.LocalDatabaseHandler;
 
-import static org.mockito.Mockito.*;
-
 /**
  * Created by Christopher R Reyes on 8/19/16.
  *
- * Tests the view model for adding transactions
+ * ViewModel for manipulating Transactions
  */
 
-public class AddTransactionViewModelTest {
-    private LocalDatabaseHandler testDbh;
+public class TransactionViewModel extends BaseObservable {
+    private final LocalDatabaseHandler dbh;
 
-    @Before
-    public void setUp() throws Exception {
-        this.testDbh = new MockLocalDatabaseHandler();
+    public TransactionViewModel(LocalDatabaseHandler dbh) {
+        this.dbh = dbh;
     }
 
-    @Test
-    public void addExpense() {
-        // Get our view model
+    public void addExpense(String name, double amount, int yearIncurred, int monthIncurred, int dayIncurred) {
 
-    }
+        ExpenseModel expense = new ExpenseModel(
+                name,
+                amount,
+                yearIncurred,
+                monthIncurred,
+                dayIncurred
+        );
 
-    private class MockLocalDatabaseHandler extends LocalDatabaseHandler {
-        private ExpenseModel lastSavedExpense;
-        private long currentId = 0;
-
-        MockLocalDatabaseHandler() {
-            super(null);
-        }
-
-        @Override
-        public Long saveExpense(ExpenseModel expense, SQLiteDatabase db) {
-            this.lastSavedExpense = expense;
-            currentId++;
-
-            return currentId;
-        }
+        dbh.saveExpense(expense);
     }
 }

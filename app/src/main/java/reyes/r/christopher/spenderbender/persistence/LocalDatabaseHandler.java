@@ -52,6 +52,13 @@ public class LocalDatabaseHandler extends SQLiteOpenHelper {
         // Database Version 1. Nothing to do on update because there is no prior version yet.
     }
 
+    public Long saveExpense(ExpenseModel expense) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Long result = this.saveExpense(expense, db);
+        db.close();
+        return result;
+    }
+
     public Long saveExpense(ExpenseModel expense, SQLiteDatabase db) {
         ContentValues formattedExpense = new ContentValues();
 
