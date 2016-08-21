@@ -52,6 +52,7 @@ public class RecordExpenseActivity extends AppCompatActivity {
                 String toastMessage = getString(R.string.record_expense_submit_success);
                 if (vm.validateFields()) {
                     vm.addExpense();
+                    vm.resetFields();
                 }
                 else {
                     toastMessage = getString(R.string.record_expense_submit_validation_failed);

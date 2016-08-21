@@ -47,13 +47,10 @@ public class TransactionViewModel extends BaseObservable {
     private int monthIncurred;
     private int dayIncurred;
 
-    private final DecimalFormat moneyFormat = new DecimalFormat("#.##");
     private final HashSet<Integer> validMonths = new HashSet<>();
 
     public TransactionViewModel(LocalDatabaseHandler dbh) {
         this.dbh = dbh;
-
-        moneyFormat.setRoundingMode(RoundingMode.CEILING);
 
         validMonths.add(GregorianCalendar.JANUARY);
         validMonths.add(GregorianCalendar.FEBRUARY);
@@ -68,9 +65,27 @@ public class TransactionViewModel extends BaseObservable {
         validMonths.add(GregorianCalendar.NOVEMBER);
         validMonths.add(GregorianCalendar.DECEMBER);
 
+        resetFields();
+    }
+
+    /**
+     * Resets all fields to their default values
+     */
+    public void resetFields() {
         // Default the date incurred to today
         Calendar today = GregorianCalendar.getInstance();
         setDateIncurred(today.get(GregorianCalendar.YEAR), today.get(GregorianCalendar.MONTH), today.get(GregorianCalendar.DAY_OF_MONTH));
+
+        // Default the name to the empty string
+        this.name = "";
+
+        // Default the amount to 0 and the amount string to empty
+        this.amount = 0;
+        this.stringAmount = "";
+
+        // Notify listeners
+        notifyPropertyChanged(BR.name);
+        notifyPropertyChanged(BR.stringAmount);
     }
 
     public void addExpense(String name, double amount, int yearIncurred, int monthIncurred, int dayIncurred) {
@@ -103,30 +118,13 @@ public class TransactionViewModel extends BaseObservable {
         // Just need to ensure that every field is specified
         return (
                 isValidName(this.name) &&
+                        ! this.name.isEmpty() &&
                         isValidAmount(this.amount) &&
                         isValidYear(this.yearIncurred) &&
                         isValidMonth(this.monthIncurred) &&
                         isValidDay(this.dayIncurred) &&
                         isValidDate(this.yearIncurred, this.monthIncurred, this.dayIncurred)
         );
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    /**
-     * Sets our double representation of the amount of this transaction
-     * Remains synchronized with our String representation as well
-     * @param amount
-     */
-    public void setAmount(double amount) throws IllegalArgumentException {
-        if (! isValidAmount(amount)) {
-            throw new IllegalArgumentException("Amount [" + String.valueOf(amount) + "] is not a valid amount");
-        }
-        this.amount = amount;
-        this.stringAmount = moneyFormat.format(amount);
-        notifyPropertyChanged(BR.stringAmount);
     }
 
     @Bindable
@@ -141,7 +139,9 @@ public class TransactionViewModel extends BaseObservable {
      */
     public void setStringAmount(String amount) throws IllegalArgumentException {
         String safeAmount = amount;
-        if (safeAmount.isEmpty()) {
+
+        // Allow the user to begin typing a decimal number without first using a zero
+        if (safeAmount == null || safeAmount.isEmpty() || safeAmount.matches("^[\\.,]$")) {
             safeAmount = String.valueOf((double) 0);
         }
 
@@ -151,7 +151,7 @@ public class TransactionViewModel extends BaseObservable {
 
         this.amount = Double.valueOf(safeAmount);
 
-        this.stringAmount = moneyFormat.format(this.amount);
+        this.stringAmount = amount;
 
         notifyPropertyChanged(BR.stringAmount);
     }
@@ -189,19 +189,19 @@ public class TransactionViewModel extends BaseObservable {
 
     public void setName(String name) throws IllegalArgumentException {
         if (!isValidName(name)) {
-            throw new IllegalArgumentException("Name must be neither null nor empty");
+            throw new IllegalArgumentException("Name must be not be null");
         }
         this.name = name;
         notifyPropertyChanged(BR.name);
     }
 
     /**
-     * Checks whether or not the name is a valid, non-empty String
+     * Checks whether or not the name is a valid String
      * @param name
      * @return
      */
     private boolean isValidName(String name) {
-        return ( name != null && ! name.isEmpty() );
+        return ( name != null );
     }
 
     @Bindable
@@ -288,6 +288,10 @@ public class TransactionViewModel extends BaseObservable {
             this.yearIncurred = yearIncurred;
             this.monthIncurred = monthIncurred;
             this.dayIncurred = dayIncurred;
+
+            notifyPropertyChanged(BR.yearIncurred);
+            notifyPropertyChanged(BR.monthIncurred);
+            notifyPropertyChanged(BR.dayIncurred);
         }
         else {
             throw new IllegalArgumentException("Must supply a valid date");
