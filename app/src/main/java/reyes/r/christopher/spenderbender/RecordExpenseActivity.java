@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import reyes.r.christopher.spenderbender.databinding.RecordExpenseActivityBinding;
 import reyes.r.christopher.spenderbender.persistence.LocalDatabaseHandler;
@@ -47,12 +48,15 @@ public class RecordExpenseActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 8/21/16 Implement onClick as SaveExpense, then make toast
-                binding.getViewModel().setAmount(binding.getViewModel().getAmount() + 0.01);
-                binding.getViewModel().setName(binding.getViewModel().getName() + "+");
-                binding.getViewModel().setYearIncurred(binding.getViewModel().getYearIncurred() + 1);
-                binding.getViewModel().setMonthIncurred((binding.getViewModel().getMonthIncurred() + 1) % 12);
-                binding.getViewModel().setDayIncurred((binding.getViewModel().getDayIncurred() + 1) % 29);
+                TransactionViewModel vm = binding.getViewModel();
+                String toastMessage = getString(R.string.record_expense_submit_success);
+                if (vm.validateFields()) {
+                    vm.addExpense();
+                }
+                else {
+                    toastMessage = getString(R.string.record_expense_submit_validation_failed);
+                }
+                Toast.makeText(RecordExpenseActivity.this, toastMessage, Toast.LENGTH_SHORT).show();
             }
         });
     }
