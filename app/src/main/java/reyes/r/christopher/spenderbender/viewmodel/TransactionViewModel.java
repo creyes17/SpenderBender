@@ -72,6 +72,10 @@ public class TransactionViewModel extends BaseObservable {
         dbh.saveExpense(expense);
     }
 
+    public void addExpense() {
+        addExpense(this.name, this.amount, this.yearIncurred, this.monthIncurred, this.dayIncurred);
+    }
+
     public double getAmount() {
         return amount;
     }

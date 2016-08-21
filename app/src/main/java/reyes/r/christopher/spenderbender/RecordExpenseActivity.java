@@ -47,6 +47,7 @@ public class RecordExpenseActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // TODO: 8/21/16 Implement onClick as SaveExpense, then make toast
                 binding.getViewModel().setAmount(binding.getViewModel().getAmount() + 0.01);
                 binding.getViewModel().setName(binding.getViewModel().getName() + "+");
                 binding.getViewModel().setYearIncurred(binding.getViewModel().getYearIncurred() + 1);
