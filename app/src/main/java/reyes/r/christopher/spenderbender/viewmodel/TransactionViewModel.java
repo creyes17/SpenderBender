@@ -37,6 +37,7 @@ public class TransactionViewModel extends BaseObservable {
     private final LocalDatabaseHandler dbh;
 
     private double amount;
+    private String stringAmount;
     private String name;
     private int yearIncurred;
     private int monthIncurred;
@@ -46,6 +47,7 @@ public class TransactionViewModel extends BaseObservable {
         this.dbh = dbh;
 
         this.amount = 1.23;
+        this.stringAmount = String.valueOf(this.amount);
         this.name = "Chris";
         this.yearIncurred = 1990;
         this.monthIncurred = Calendar.MAY;
@@ -65,14 +67,30 @@ public class TransactionViewModel extends BaseObservable {
         dbh.saveExpense(expense);
     }
 
-    @Bindable
     public double getAmount() {
         return amount;
     }
 
     public void setAmount(double amount) {
         this.amount = amount;
-        notifyPropertyChanged(BR.amount);
+        this.stringAmount = String.valueOf(amount);
+        notifyPropertyChanged(BR.stringAmount);
+    }
+
+    @Bindable
+    public String getStringAmount() {
+        return stringAmount;
+    }
+
+    public void setStringAmount(String amount) {
+        this.stringAmount = amount;
+        if (this.stringAmount.isEmpty()) {
+            this.amount = 0;
+        }
+        else {
+            this.amount = Double.valueOf(amount);
+        }
+        notifyPropertyChanged(BR.stringAmount);
     }
 
     @Bindable

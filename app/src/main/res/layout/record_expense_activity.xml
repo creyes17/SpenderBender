@@ -37,7 +37,7 @@
             android:ems="10"
             android:id="@+id/amount"
             android:hint="@string/record_expense_amount_hint"
-            android:text="@{String.valueOf(viewModel.amount)}"
+            android:text="@={viewModel.stringAmount}"
             android:maxLines="1" />
 
         <EditText
@@ -47,7 +47,7 @@
             android:ems="10"
             android:id="@+id/name"
             android:hint="@string/record_expense_name_hint"
-            android:text="@{viewModel.name}"
+            android:text="@={viewModel.name}"
             android:maxLines="1" />
 
         <DatePicker
@@ -56,9 +56,9 @@
             android:id="@+id/dateIncurred"
             android:fadeScrollbars="false"
             android:contentDescription="@string/record_expense_date_incurred_content_description"
-            android:year="@{viewModel.yearIncurred}"
-            android:month="@{viewModel.monthIncurred}"
-            android:day="@{viewModel.dayIncurred}"
+            android:year="@={viewModel.yearIncurred}"
+            android:month="@={viewModel.monthIncurred}"
+            android:day="@={viewModel.dayIncurred}"
             />
 
         <Button
