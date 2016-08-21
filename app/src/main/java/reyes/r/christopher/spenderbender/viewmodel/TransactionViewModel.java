@@ -21,6 +21,8 @@ package reyes.r.christopher.spenderbender.viewmodel;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import reyes.r.christopher.spenderbender.BR;
@@ -43,11 +45,14 @@ public class TransactionViewModel extends BaseObservable {
     private int monthIncurred;
     private int dayIncurred;
 
+    private final DecimalFormat moneyFormat = new DecimalFormat("#.##");
+
     public TransactionViewModel(LocalDatabaseHandler dbh) {
         this.dbh = dbh;
 
+        moneyFormat.setRoundingMode(RoundingMode.CEILING);
         this.amount = 1.23;
-        this.stringAmount = String.valueOf(this.amount);
+        this.stringAmount = moneyFormat.format(this.amount);
         this.name = "Chris";
         this.yearIncurred = 1990;
         this.monthIncurred = Calendar.MAY;
@@ -73,7 +78,7 @@ public class TransactionViewModel extends BaseObservable {
 
     public void setAmount(double amount) {
         this.amount = amount;
-        this.stringAmount = String.valueOf(amount);
+        this.stringAmount = moneyFormat.format(amount);
         notifyPropertyChanged(BR.stringAmount);
     }
 
@@ -83,13 +88,13 @@ public class TransactionViewModel extends BaseObservable {
     }
 
     public void setStringAmount(String amount) {
-        this.stringAmount = amount;
         if (this.stringAmount.isEmpty()) {
             this.amount = 0;
         }
         else {
             this.amount = Double.valueOf(amount);
         }
+        this.stringAmount = moneyFormat.format(this.amount);
         notifyPropertyChanged(BR.stringAmount);
     }
 
