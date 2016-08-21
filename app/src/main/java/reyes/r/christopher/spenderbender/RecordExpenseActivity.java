@@ -18,14 +18,24 @@
 
 package reyes.r.christopher.spenderbender;
 
+import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import reyes.r.christopher.spenderbender.databinding.RecordExpenseActivityBinding;
+import reyes.r.christopher.spenderbender.persistence.LocalDatabaseHandler;
+import reyes.r.christopher.spenderbender.viewmodel.TransactionViewModel;
 
 public class RecordExpenseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.record_expense_activity);
+
+        LocalDatabaseHandler dbh = new LocalDatabaseHandler(this);
+        TransactionViewModel viewModel = new TransactionViewModel(dbh);
+
+        RecordExpenseActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.record_expense_activity);
+        binding.setViewModel(viewModel);
     }
 }

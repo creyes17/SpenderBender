@@ -19,7 +19,11 @@
 package reyes.r.christopher.spenderbender.viewmodel;
 
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 
+import java.util.Calendar;
+
+import reyes.r.christopher.spenderbender.BR;
 import reyes.r.christopher.spenderbender.model.ExpenseModel;
 import reyes.r.christopher.spenderbender.persistence.LocalDatabaseHandler;
 
@@ -32,8 +36,20 @@ import reyes.r.christopher.spenderbender.persistence.LocalDatabaseHandler;
 public class TransactionViewModel extends BaseObservable {
     private final LocalDatabaseHandler dbh;
 
+    private double amount;
+    private String name;
+    private int yearIncurred;
+    private int monthIncurred;
+    private int dayIncurred;
+
     public TransactionViewModel(LocalDatabaseHandler dbh) {
         this.dbh = dbh;
+
+        this.amount = 1.23;
+        this.name = "Chris";
+        this.yearIncurred = 1990;
+        this.monthIncurred = Calendar.MAY;
+        this.dayIncurred = 15;
     }
 
     public void addExpense(String name, double amount, int yearIncurred, int monthIncurred, int dayIncurred) {
@@ -47,5 +63,55 @@ public class TransactionViewModel extends BaseObservable {
         );
 
         dbh.saveExpense(expense);
+    }
+
+    @Bindable
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+        notifyPropertyChanged(BR.amount);
+    }
+
+    @Bindable
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        notifyPropertyChanged(BR.name);
+    }
+
+    @Bindable
+    public int getYearIncurred() {
+        return yearIncurred;
+    }
+
+    public void setYearIncurred(int yearIncurred) {
+        this.yearIncurred = yearIncurred;
+        notifyPropertyChanged(BR.yearIncurred);
+    }
+
+    @Bindable
+    public int getMonthIncurred() {
+        return monthIncurred;
+    }
+
+    public void setMonthIncurred(int monthIncurred) {
+        this.monthIncurred = monthIncurred;
+        notifyPropertyChanged(BR.monthIncurred);
+    }
+
+    @Bindable
+    public int getDayIncurred() {
+        return dayIncurred;
+    }
+
+    public void setDayIncurred(int dayIncurred) {
+        this.dayIncurred = dayIncurred;
+        notifyPropertyChanged(BR.dayIncurred);
     }
 }
