@@ -21,6 +21,9 @@ package reyes.r.christopher.spenderbender;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import reyes.r.christopher.spenderbender.databinding.RecordExpenseActivityBinding;
 import reyes.r.christopher.spenderbender.persistence.LocalDatabaseHandler;
@@ -35,7 +38,21 @@ public class RecordExpenseActivity extends AppCompatActivity {
         LocalDatabaseHandler dbh = new LocalDatabaseHandler(this);
         TransactionViewModel viewModel = new TransactionViewModel(dbh);
 
-        RecordExpenseActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.record_expense_activity);
+        final RecordExpenseActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.record_expense_activity);
         binding.setViewModel(viewModel);
+
+        Button submit = (Button) findViewById(R.id.submit);
+        assert submit != null;
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.getViewModel().setAmount(binding.getViewModel().getAmount() + 0.01);
+                binding.getViewModel().setName(binding.getViewModel().getName() + "+");
+                binding.getViewModel().setYearIncurred(binding.getViewModel().getYearIncurred() + 1);
+                binding.getViewModel().setMonthIncurred((binding.getViewModel().getMonthIncurred() + 1) % 12);
+                binding.getViewModel().setDayIncurred((binding.getViewModel().getDayIncurred() + 1) % 29);
+            }
+        });
     }
 }
