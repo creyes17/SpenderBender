@@ -262,6 +262,95 @@ public class TransactionViewModelTest {
 
     @Test
     public void setStringAmount() throws Exception {
+        TransactionViewModel viewModel = new TransactionViewModel(mock(LocalDatabaseHandler.class));
+
+        boolean expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setStringAmount(null);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Amount can be null", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setStringAmount("");
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Amount can be empty string", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setStringAmount(".");
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Amount can be decimal point by itself", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setStringAmount("0.1.2");
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertTrue("Amount cannot have multiple decimal points", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setStringAmount(String.valueOf(Double.NEGATIVE_INFINITY));
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertTrue("Amount cannot be negative infinity", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setStringAmount(String.valueOf(Double.POSITIVE_INFINITY));
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertTrue("Amount cannot be positive infinity", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setStringAmount("1.23");
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Amount can be random floating point number", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setStringAmount("123");
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Amount can be random integer", expectedExceptionThrown);
     }
 
     @Test
