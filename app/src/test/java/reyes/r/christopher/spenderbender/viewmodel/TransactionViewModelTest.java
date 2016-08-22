@@ -262,12 +262,46 @@ public class TransactionViewModelTest {
 
     @Test
     public void setStringAmount() throws Exception {
-
     }
 
     @Test
     public void setName() throws Exception {
+        TransactionViewModel viewModel = new TransactionViewModel(mock(LocalDatabaseHandler.class));
 
+        boolean expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setName(null);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertTrue("Name cannot be null", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setName("");
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Name can be the empty string", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setName("foo");
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Name can be a non-empty string", expectedExceptionThrown);
+
+        // TODO: 8/21/16 Add tests for special characters, like emojis or hebrew or other writing languages
     }
 
     @Test
