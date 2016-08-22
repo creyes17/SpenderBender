@@ -34,7 +34,7 @@ import reyes.r.christopher.spenderbender.model.ExpenseModel;
 public class LocalDatabaseHandler extends SQLiteOpenHelper {
 
     static final String DatabaseName = "SpenderBenderSQLiteDB";
-    static final int DatabaseVersion = 1;
+    private static final int DatabaseVersion = 1;
 
     public LocalDatabaseHandler(Context context) {
         super(context, DatabaseName, null, DatabaseVersion);

@@ -18,9 +18,6 @@
 
 package reyes.r.christopher.spenderbender.viewmodel;
 
-import android.util.Log;
-import android.view.View;
-
 import junit.framework.Assert;
 
 import org.junit.After;

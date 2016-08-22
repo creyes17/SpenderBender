@@ -48,10 +48,6 @@ class SQLiteTableSchema {
         this.SQLCreateStatement = generateCreateSQL();
     }
 
-    List<SQLiteColumnDefinition> getColumns() {
-        return columns;
-    }
-
     String getName() {
         return name;
     }

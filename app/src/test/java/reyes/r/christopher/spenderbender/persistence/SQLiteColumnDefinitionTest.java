@@ -18,18 +18,13 @@
 
 package reyes.r.christopher.spenderbender.persistence;
 
-import android.text.TextUtils;
-import android.util.Log;
-
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
