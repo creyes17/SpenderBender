@@ -18,25 +18,24 @@
 
 package reyes.r.christopher.spenderbender.viewmodel;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
+import android.view.View;
 
 import junit.framework.Assert;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.cglib.core.Local;
+import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import java.security.InvalidKeyException;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.concurrent.ExecutionException;
 
 import reyes.r.christopher.spenderbender.model.ExpenseModel;
 import reyes.r.christopher.spenderbender.persistence.LocalDatabaseHandler;
-
-import static org.mockito.Mockito.*;
 
 /**
  * Created by Christopher R Reyes on 8/19/16.
@@ -45,13 +44,12 @@ import static org.mockito.Mockito.*;
  */
 
 public class TransactionViewModelTest {
-    @Test
-    public void addExpense() {
-        MockDatabaseHandler testDbh = new MockDatabaseHandler();
+    private ExpenseModel validExpenseModel1;
+    private ExpenseModel validExpenseModel2;
 
-        TransactionViewModel viewModel = new TransactionViewModel(testDbh);
-
-        ExpenseModel expenseModel1 = new ExpenseModel(
+    @Before
+    public void setUp() throws Exception {
+        validExpenseModel1 = new ExpenseModel(
                 "Sushi",
                 35.92,
                 2016,
@@ -59,45 +57,340 @@ public class TransactionViewModelTest {
                 19
         );
 
-        viewModel.addExpense(
-                expenseModel1.getName(),
-                expenseModel1.getAmount(),
-                expenseModel1.getYearIncurred(),
-                expenseModel1.getMonthIncurred(),
-                expenseModel1.getDayIncurred()
-        );
-
-        ExpenseModel savedExpense = testDbh.getLastSavedExpense();
-
-        Assert.assertEquals("Saved the correct expense name", expenseModel1.getName(), savedExpense.getName());
-        Assert.assertEquals("Saved the correct expense amount", expenseModel1.getAmount(), savedExpense.getAmount(), 0.001);
-        Assert.assertEquals("Saved the correct expense year", expenseModel1.getYearIncurred(), savedExpense.getYearIncurred());
-        Assert.assertEquals("Saved the correct expense month", expenseModel1.getMonthIncurred(), savedExpense.getMonthIncurred());
-        Assert.assertEquals("Saved the correct expense day", expenseModel1.getDayIncurred(), savedExpense.getDayIncurred());
-
-        ExpenseModel expenseModel2 = new ExpenseModel(
-                "Potatos",
+        validExpenseModel2 = new ExpenseModel(
+                "Potatoes",
                 5.67,
                 2016,
                 Calendar.AUGUST,
                 19
         );
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        validExpenseModel1 = null;
+        validExpenseModel2 = null;
+    }
+
+    @Test
+    public void resetFields() throws Exception {
+
+    }
+
+    @Test
+    public void validateFields() throws Exception {
+        TransactionViewModel viewModel = new TransactionViewModel(mock(LocalDatabaseHandler.class));
+
+        setViewModelPrivateFields(viewModel, validExpenseModel1);
+
+        Assert.assertTrue("Valid expense should return valid fields", viewModel.validateFields());
+
+        ExpenseModel invalidExpense1NullName = new ExpenseModel(
+                null,
+                1.23,
+                2015,
+                Calendar.FEBRUARY,
+                2
+        );
+
+        setViewModelPrivateFields(viewModel, invalidExpense1NullName);
+
+        Assert.assertFalse("Null name should not be valid for saving expense", viewModel.validateFields());
+
+        setViewModelPrivateFields(viewModel, validExpenseModel2);
+
+        Assert.assertTrue("Valid expense should return valid fields", viewModel.validateFields());
+
+        ExpenseModel invalidExpense2EmptyName = new ExpenseModel(
+                "",
+                12.34,
+                2015,
+                Calendar.FEBRUARY,
+                2
+        );
+
+        Assert.assertTrue("Couldn't correctly initialize Expense with an empty name", invalidExpense2EmptyName.getName().isEmpty());
+
+        setViewModelPrivateFields(viewModel, invalidExpense2EmptyName);
+
+        Assert.assertFalse("Empty name should not be valid for saving expenses", viewModel.validateFields());
+
+        ExpenseModel invalidExpense3InfiniteAmount = new ExpenseModel(
+                "positive infinity",
+                Double.POSITIVE_INFINITY,
+                2015,
+                Calendar.FEBRUARY,
+                2
+        );
+
+        setViewModelPrivateFields(viewModel, invalidExpense3InfiniteAmount);
+
+        Assert.assertFalse("Positive infinity is not a valid transaction amount", viewModel.validateFields());
+
+        ExpenseModel invalidExpense4InfiniteAmount = new ExpenseModel(
+                "positive infinity",
+                Double.NEGATIVE_INFINITY,
+                2015,
+                Calendar.FEBRUARY,
+                2
+        );
+
+        setViewModelPrivateFields(viewModel, invalidExpense4InfiniteAmount);
+
+        Assert.assertFalse("Negative infinity is not a valid transaction amount", viewModel.validateFields());
+
+        ExpenseModel invalidExpense5InvalidYear = new ExpenseModel(
+                "Year before 1k",
+                1.23,
+                500,
+                Calendar.FEBRUARY,
+                2
+        );
+
+        setViewModelPrivateFields(viewModel, invalidExpense5InvalidYear);
+
+        Assert.assertFalse("Expenses cannot be incurred prior to 1000 AD", viewModel.validateFields());
+
+        ExpenseModel validExpense6ValidYear = new ExpenseModel(
+                "AD 1000",
+                1.23,
+                1000,
+                Calendar.FEBRUARY,
+                2
+        );
+
+        setViewModelPrivateFields(viewModel, validExpense6ValidYear);
+
+        Assert.assertTrue("Expenses should be permitted beginning in 1000 AD", viewModel.validateFields());
+
+        ExpenseModel invalidExpense7InvalidMonth = new ExpenseModel(
+                "Month before January",
+                1.23,
+                2010,
+                Calendar.JANUARY - 1,
+                2
+        );
+
+        setViewModelPrivateFields(viewModel, invalidExpense7InvalidMonth);
+
+        Assert.assertFalse("Only allow exact months as defined in Calendar class", viewModel.validateFields());
+
+        ExpenseModel invalidExpense8InvalidMonth = new ExpenseModel(
+                "Month after December",
+                1.23,
+                2010,
+                Calendar.DECEMBER + 1,
+                2
+        );
+
+        setViewModelPrivateFields(viewModel, invalidExpense8InvalidMonth);
+
+        Assert.assertFalse("Only allow exact months as defined in Calendar class", viewModel.validateFields());
+
+        ExpenseModel invalidExpense9InvalidDay = new ExpenseModel(
+                "Day before 1",
+                1.23,
+                2010,
+                Calendar.DECEMBER,
+                0
+        );
+
+        setViewModelPrivateFields(viewModel, invalidExpense9InvalidDay);
+
+        Assert.assertFalse("Only allow days between 1 and 31", viewModel.validateFields());
+
+        ExpenseModel invalidExpense10InvalidDay = new ExpenseModel(
+                "Day after 31",
+                1.23,
+                2010,
+                Calendar.DECEMBER,
+                32
+        );
+
+        setViewModelPrivateFields(viewModel, invalidExpense10InvalidDay);
+
+        Assert.assertFalse("Only allow days between 1 and 31", viewModel.validateFields());
+
+        ExpenseModel invalidExpense11InvalidDate = new ExpenseModel(
+                "February 29, non leap year",
+                1.23,
+                2013,
+                Calendar.FEBRUARY,
+                29
+        );
+
+        setViewModelPrivateFields(viewModel, invalidExpense11InvalidDate);
+
+        Assert.assertFalse("Only allow leap days on leap years", viewModel.validateFields());
+
+        ExpenseModel validExpense12ValidDate = new ExpenseModel(
+                "February 29, leap year",
+                1.23,
+                2008,
+                Calendar.FEBRUARY,
+                29
+        );
+
+        setViewModelPrivateFields(viewModel, validExpense12ValidDate);
+
+        Assert.assertTrue("Allow leap days on leap years", viewModel.validateFields());
+
+        ExpenseModel invalidExpense13InvalidDate = new ExpenseModel(
+                "February 30",
+                1.23,
+                2008,
+                Calendar.FEBRUARY,
+                30
+        );
+
+        setViewModelPrivateFields(viewModel, invalidExpense13InvalidDate);
+
+        Assert.assertFalse("February 30 is not a real date, no matter the year", viewModel.validateFields());
+
+        ExpenseModel invalidExpense14InvalidDate = new ExpenseModel(
+                "April 31",
+                1.23,
+                2008,
+                Calendar.APRIL,
+                31
+        );
+
+        setViewModelPrivateFields(viewModel, invalidExpense14InvalidDate);
+
+        Assert.assertFalse("April 31 is not a real date, no matter the year", viewModel.validateFields());
+    }
+
+    @Test
+    public void setStringAmount() throws Exception {
+
+    }
+
+    @Test
+    public void setName() throws Exception {
+
+    }
+
+    @Test
+    public void setYearIncurred() throws Exception {
+
+    }
+
+    @Test
+    public void setMonthIncurred() throws Exception {
+
+    }
+
+    @Test
+    public void setDayIncurred() throws Exception {
+
+    }
+
+    @Test
+    public void addExpenseWithArgs() {
+        MockDatabaseHandler testDbh = new MockDatabaseHandler();
+
+        TransactionViewModel viewModel = new TransactionViewModel(testDbh);
 
         viewModel.addExpense(
-                expenseModel2.getName(),
-                expenseModel2.getAmount(),
-                expenseModel2.getYearIncurred(),
-                expenseModel2.getMonthIncurred(),
-                expenseModel2.getDayIncurred()
+                validExpenseModel1.getName(),
+                validExpenseModel1.getAmount(),
+                validExpenseModel1.getYearIncurred(),
+                validExpenseModel1.getMonthIncurred(),
+                validExpenseModel1.getDayIncurred()
+        );
+
+        ExpenseModel savedExpense = testDbh.getLastSavedExpense();
+
+        Assert.assertEquals("Saved the correct expense name", validExpenseModel1.getName(), savedExpense.getName());
+        Assert.assertEquals("Saved the correct expense amount", validExpenseModel1.getAmount(), savedExpense.getAmount(), 0.001);
+        Assert.assertEquals("Saved the correct expense year", validExpenseModel1.getYearIncurred(), savedExpense.getYearIncurred());
+        Assert.assertEquals("Saved the correct expense month", validExpenseModel1.getMonthIncurred(), savedExpense.getMonthIncurred());
+        Assert.assertEquals("Saved the correct expense day", validExpenseModel1.getDayIncurred(), savedExpense.getDayIncurred());
+
+        viewModel.addExpense(
+                validExpenseModel2.getName(),
+                validExpenseModel2.getAmount(),
+                validExpenseModel2.getYearIncurred(),
+                validExpenseModel2.getMonthIncurred(),
+                validExpenseModel2.getDayIncurred()
         );
 
         savedExpense = testDbh.getLastSavedExpense();
 
-        Assert.assertEquals("Saved the correct expense name", expenseModel2.getName(), savedExpense.getName());
-        Assert.assertEquals("Saved the correct expense amount", expenseModel2.getAmount(), savedExpense.getAmount(), 0.001);
-        Assert.assertEquals("Saved the correct expense year", expenseModel2.getYearIncurred(), savedExpense.getYearIncurred());
-        Assert.assertEquals("Saved the correct expense month", expenseModel2.getMonthIncurred(), savedExpense.getMonthIncurred());
-        Assert.assertEquals("Saved the correct expense day", expenseModel2.getDayIncurred(), savedExpense.getDayIncurred());
+        Assert.assertEquals("Saved the correct expense name", validExpenseModel2.getName(), savedExpense.getName());
+        Assert.assertEquals("Saved the correct expense amount", validExpenseModel2.getAmount(), savedExpense.getAmount(), 0.001);
+        Assert.assertEquals("Saved the correct expense year", validExpenseModel2.getYearIncurred(), savedExpense.getYearIncurred());
+        Assert.assertEquals("Saved the correct expense month", validExpenseModel2.getMonthIncurred(), savedExpense.getMonthIncurred());
+        Assert.assertEquals("Saved the correct expense day", validExpenseModel2.getDayIncurred(), savedExpense.getDayIncurred());
+    }
+
+    @Test
+    public void addExpenseWithoutArgs() throws Exception {
+        TransactionViewModel viewModel = mock(TransactionViewModel.class);
+
+        final ArrayList<ExpenseModel> savedExpenses = new ArrayList<>();
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                savedExpenses.add(new ExpenseModel(
+                        (String) args[0],
+                        (Double) args[1],
+                        (Integer) args[2],
+                        (Integer) args[3],
+                        (Integer) args[4]
+                ));
+                return null;
+            }
+        }).when(viewModel).addExpense(anyString(), anyDouble(), anyInt(), anyInt(), anyInt());
+
+        doCallRealMethod().when(viewModel).addExpense();
+        when(viewModel.validateFields()).thenReturn(Boolean.TRUE);
+
+        setViewModelPrivateFields(viewModel, validExpenseModel1);
+        viewModel.addExpense();
+
+        ExpenseModel savedExpense = savedExpenses.get(savedExpenses.size() - 1);
+
+        Assert.assertEquals("Saved the correct expense name", validExpenseModel1.getName(), savedExpense.getName());
+        Assert.assertEquals("Saved the correct expense amount", validExpenseModel1.getAmount(), savedExpense.getAmount(), 0.001);
+        Assert.assertEquals("Saved the correct expense year", validExpenseModel1.getYearIncurred(), savedExpense.getYearIncurred());
+        Assert.assertEquals("Saved the correct expense month", validExpenseModel1.getMonthIncurred(), savedExpense.getMonthIncurred());
+        Assert.assertEquals("Saved the correct expense day", validExpenseModel1.getDayIncurred(), savedExpense.getDayIncurred());
+
+        setViewModelPrivateFields(viewModel, validExpenseModel2);
+        viewModel.addExpense();
+
+        savedExpense = savedExpenses.get(savedExpenses.size() - 1);
+
+        Assert.assertEquals("Saved the correct expense name", validExpenseModel2.getName(), savedExpense.getName());
+        Assert.assertEquals("Saved the correct expense amount", validExpenseModel2.getAmount(), savedExpense.getAmount(), 0.001);
+        Assert.assertEquals("Saved the correct expense year", validExpenseModel2.getYearIncurred(), savedExpense.getYearIncurred());
+        Assert.assertEquals("Saved the correct expense month", validExpenseModel2.getMonthIncurred(), savedExpense.getMonthIncurred());
+        Assert.assertEquals("Saved the correct expense day", validExpenseModel2.getDayIncurred(), savedExpense.getDayIncurred());
+
+        boolean threwExpectedException = Boolean.FALSE;
+        when(viewModel.validateFields()).thenReturn(Boolean.FALSE);
+
+        // Should throw exception when it has invalid fields
+        try {
+            viewModel.addExpense();
+        } catch (IllegalStateException e) {
+            threwExpectedException = Boolean.TRUE;
+        } catch (Exception e) {
+            threwExpectedException = Boolean.FALSE;
+        }
+
+        Assert.assertTrue("Should not allow saving with invalid fields", threwExpectedException);
+    }
+
+    private void setViewModelPrivateFields(TransactionViewModel viewModel, ExpenseModel expense) {
+        Whitebox.setInternalState(viewModel, "name", expense.getName());
+        Whitebox.setInternalState(viewModel, "amount", expense.getAmount());
+        Whitebox.setInternalState(viewModel, "yearIncurred", expense.getYearIncurred());
+        Whitebox.setInternalState(viewModel, "monthIncurred", expense.getMonthIncurred());
+        Whitebox.setInternalState(viewModel, "dayIncurred", expense.getDayIncurred());
     }
 
     private class MockDatabaseHandler extends LocalDatabaseHandler {
