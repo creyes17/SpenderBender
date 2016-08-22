@@ -272,17 +272,391 @@ public class TransactionViewModelTest {
 
     @Test
     public void setYearIncurred() throws Exception {
+        TransactionViewModel viewModel = new TransactionViewModel(mock(LocalDatabaseHandler.class));
 
+        boolean expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setYearIncurred(999);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertTrue("Year cannot be before 1000 AD", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setYearIncurred(0);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertTrue("Year cannot be before 1000 AD", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setYearIncurred(1);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertTrue("Year cannot be before 1000 AD", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setYearIncurred(-1);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertTrue("Year cannot be before 1000 AD", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setYearIncurred(1000);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Year 1000 AD is valid", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setYearIncurred(1001);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Years after 1000 AD are valid", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setYearIncurred(1900);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Years after 1000 AD are valid", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setYearIncurred(1901);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Years after 1000 AD are valid", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setYearIncurred(1100);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Years after 1000 AD are valid", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setYearIncurred(1101);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Years after 1000 AD are valid", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setYearIncurred(1999);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Years after 1000 AD are valid", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setYearIncurred(2000);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Years after 1000 AD are valid", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setYearIncurred(20000);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Years after 1000 AD are valid", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setYearIncurred(Integer.MAX_VALUE);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Years after 1000 AD are valid", expectedExceptionThrown);
     }
 
     @Test
     public void setMonthIncurred() throws Exception {
+        TransactionViewModel viewModel = new TransactionViewModel(mock(LocalDatabaseHandler.class));
 
+        boolean expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setMonthIncurred(Calendar.JANUARY-1);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertTrue("Month cannot be before January", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setMonthIncurred(Calendar.JANUARY);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("January is a valid Month", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setMonthIncurred(Calendar.FEBRUARY);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("February is a valid Month", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setMonthIncurred(Calendar.MARCH);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("March is a valid Month", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setMonthIncurred(Calendar.APRIL);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("April is a valid Month", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setMonthIncurred(Calendar.MAY);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("May is a valid Month", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setMonthIncurred(Calendar.JUNE);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("June is a valid Month", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setMonthIncurred(Calendar.JULY);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("July is a valid Month", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setMonthIncurred(Calendar.AUGUST);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("August is a valid Month", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setMonthIncurred(Calendar.SEPTEMBER);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("September is a valid Month", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setMonthIncurred(Calendar.OCTOBER);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("October is a valid Month", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setMonthIncurred(Calendar.NOVEMBER);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("November is a valid Month", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setMonthIncurred(Calendar.DECEMBER);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("December is a valid Month", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setMonthIncurred(Calendar.DECEMBER+1);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertTrue("Month cannot be after December", expectedExceptionThrown);
     }
 
     @Test
     public void setDayIncurred() throws Exception {
+        TransactionViewModel viewModel = new TransactionViewModel(mock(LocalDatabaseHandler.class));
 
+        boolean expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setDayIncurred(0);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertTrue("Day cannot be less than 1", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setDayIncurred(-1);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertTrue("Day cannot be less than 1", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setDayIncurred(1);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Day can be 1", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setDayIncurred(32);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertTrue("Day cannot be greater than 31", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setDayIncurred(31);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Day can be 31", expectedExceptionThrown);
+
+        expectedExceptionThrown = Boolean.FALSE;
+        try {
+            viewModel.setDayIncurred(15);
+        } catch ( IllegalArgumentException e ) {
+            expectedExceptionThrown = Boolean.TRUE;
+        } catch ( Exception e ) {
+            Assert.assertFalse("Caught unexpected exception: " + e.getMessage(), Boolean.TRUE);
+        }
+
+        Assert.assertFalse("Day can be 15", expectedExceptionThrown);
     }
 
     @Test
