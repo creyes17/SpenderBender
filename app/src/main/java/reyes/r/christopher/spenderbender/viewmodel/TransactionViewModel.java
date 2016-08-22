@@ -21,8 +21,6 @@ package reyes.r.christopher.spenderbender.viewmodel;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
