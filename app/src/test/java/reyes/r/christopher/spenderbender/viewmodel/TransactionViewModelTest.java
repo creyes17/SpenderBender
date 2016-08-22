@@ -18,6 +18,7 @@
 
 package reyes.r.christopher.spenderbender.viewmodel;
 
+import android.util.Log;
 import android.view.View;
 
 import junit.framework.Assert;
@@ -52,7 +53,7 @@ public class TransactionViewModelTest {
         validExpenseModel1 = new ExpenseModel(
                 "Sushi",
                 35.92,
-                2016,
+                2012,
                 Calendar.AUGUST,
                 19
         );
@@ -60,9 +61,9 @@ public class TransactionViewModelTest {
         validExpenseModel2 = new ExpenseModel(
                 "Potatoes",
                 5.67,
-                2016,
-                Calendar.AUGUST,
-                19
+                2012,
+                Calendar.JULY,
+                18
         );
     }
 
@@ -74,7 +75,30 @@ public class TransactionViewModelTest {
 
     @Test
     public void resetFields() throws Exception {
+        TransactionViewModel viewModel = new TransactionViewModel(mock(LocalDatabaseHandler.class));
 
+        String defaultName = viewModel.getName();
+        String defaultAmount = viewModel.getStringAmount();
+
+        int defaultYear = viewModel.getYearIncurred();
+        int defaultMonth = viewModel.getMonthIncurred();
+        int defaultDay = viewModel.getDayIncurred();
+
+        setViewModelPrivateFields(viewModel, validExpenseModel1);
+
+        Assert.assertEquals("ViewModel initialized correctly", validExpenseModel1.getName(), viewModel.getName());
+        Assert.assertEquals("ViewModel initialized correctly", validExpenseModel1.getAmount(), Double.valueOf(viewModel.getStringAmount()), 0.001);
+        Assert.assertEquals("ViewModel initialized correctly", validExpenseModel1.getYearIncurred(), viewModel.getYearIncurred());
+        Assert.assertEquals("ViewModel initialized correctly", validExpenseModel1.getMonthIncurred(), viewModel.getMonthIncurred());
+        Assert.assertEquals("ViewModel initialized correctly", validExpenseModel1.getDayIncurred(), viewModel.getDayIncurred());
+
+        viewModel.resetFields();
+
+        Assert.assertEquals("ViewModel name reset correctly", defaultName, viewModel.getName());
+        Assert.assertEquals("ViewModel amount reset correctly", defaultAmount, viewModel.getStringAmount());
+        Assert.assertEquals("ViewModel year incurred reset correctly", defaultYear, viewModel.getYearIncurred());
+        Assert.assertEquals("ViewModel month incurred reset correctly", defaultMonth, viewModel.getMonthIncurred());
+        Assert.assertEquals("ViewModel day incurred reset correctly", defaultDay, viewModel.getDayIncurred());
     }
 
     @Test
@@ -885,6 +909,7 @@ public class TransactionViewModelTest {
     private void setViewModelPrivateFields(TransactionViewModel viewModel, ExpenseModel expense) {
         Whitebox.setInternalState(viewModel, "name", expense.getName());
         Whitebox.setInternalState(viewModel, "amount", expense.getAmount());
+        Whitebox.setInternalState(viewModel, "stringAmount", String.valueOf(expense.getAmount()));
         Whitebox.setInternalState(viewModel, "yearIncurred", expense.getYearIncurred());
         Whitebox.setInternalState(viewModel, "monthIncurred", expense.getMonthIncurred());
         Whitebox.setInternalState(viewModel, "dayIncurred", expense.getDayIncurred());
