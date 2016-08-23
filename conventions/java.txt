@@ -30,7 +30,7 @@ Copyright and Contributions
 		 * ...
 		 */
 	In the Javadoc comments for the top level class or interface in each file, you should include the list of contributors.
-		If you are creating the file for the first time, add a line to the bottom of the comments in the form:
+		If you are creating the file for the first time, add a line to the class level block comments
 			* Created by {Your Name}: {Date in MM/DD/YYYY Format}
 		If you are the first non-creator contributor to the file, immediately underneath the "Created by" line, add:
 			* Contributors:
