@@ -18,10 +18,12 @@
 
 package reyes.r.christopher.spenderbender.persistence;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.provider.CalendarContract;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.RenamingDelegatingContext;
@@ -35,6 +37,7 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 
 import reyes.r.christopher.spenderbender.model.ExpenseModel;
@@ -55,7 +58,7 @@ public class LocalDataTests {
 
         File previousTestDatabaseIfExists = testContext.getDatabasePath(LocalDatabaseHandler.DatabaseName);
 
-        // As part of the setup, backup the existing database (if it exists), and then delete it
+        // As part of the setup, delete the existing test database if it exists
 
         Assert.assertTrue("Make sure we're working with a test database", previousTestDatabaseIfExists.getName().matches("^\\s*" + prefix + ".*$"));
         Assert.assertNotEquals("Make sure we haven't accidentally modified our tests to make the real database the test database", LocalDatabaseHandler.DatabaseName.toUpperCase(Locale.getDefault()), previousTestDatabaseIfExists.getName().toUpperCase(Locale.getDefault()));
@@ -295,9 +298,84 @@ public class LocalDataTests {
             expenses.moveToNext();
         }
 
+        // TODO: 8/25/16 Add tests for saving expense when it already has id because of new constructor
+
         countStar.close();
         expenses.close();
         db.close();
     }
 
+    @Test
+    public void canGetAllExpenses() {
+        // Note: We assume that the saveExpense method has already been tested and works
+        Assert.assertEquals("When there are no expenses, getAllExpenses return an empty list", 0, this.databaseHandler.getAllExpenses().size());
+
+        ExpenseModel expenseModel1 = new ExpenseModel(
+                "thing1",
+                1.23,
+                2015,
+                Calendar.DECEMBER,
+                22
+        );
+
+        // Again, we assume that the saveExpense method has already been tested, and that this will add a row to the database
+        long expenseModel1Id = this.databaseHandler.saveExpense(expenseModel1);
+
+        List<ExpenseModel> allExpenses = this.databaseHandler.getAllExpenses();
+        Assert.assertEquals("With one expense saved, getAllExpenses returns that one expense", 1, allExpenses.size());
+
+        ExpenseModel modelToCompare = allExpenses.get(0);
+
+        Assert.assertEquals("Able to retrieve single expense name correctly", expenseModel1.getName(), modelToCompare.getName());
+        Assert.assertEquals("Able to retrieve single expense amount correctly", expenseModel1.getAmount(), modelToCompare.getAmount(), 0.001);
+        Assert.assertEquals("Able to retrieve single expense yearIncurred correctly", expenseModel1.getYearIncurred(), modelToCompare.getYearIncurred());
+        Assert.assertEquals("Able to retrieve single expense monthIncurred correctly", expenseModel1.getMonthIncurred(), modelToCompare.getMonthIncurred());
+        Assert.assertEquals("Able to retrieve single expense dayIncurred correctly", expenseModel1.getDayIncurred(), modelToCompare.getDayIncurred());
+        Assert.assertEquals("Able to retrieve single expense yearCreated correctly", expenseModel1.getYearCreated(), modelToCompare.getYearCreated());
+        Assert.assertEquals("Able to retrieve single expense monthCreated correctly", expenseModel1.getMonthCreated(), modelToCompare.getMonthCreated());
+        Assert.assertEquals("Able to retrieve single expense dayCreated correctly", expenseModel1.getDayCreated(), modelToCompare.getDayCreated());
+        Assert.assertEquals("Able to retrieve single expense id correctly", expenseModel1Id, modelToCompare.getId());
+
+        allExpenses = this.databaseHandler.getAllExpenses();
+        Assert.assertEquals("getAllExpenses always returns the correct number of results", 1, allExpenses.size());
+
+        ExpenseModel expenseModel2 = new ExpenseModel(
+                "thing2",
+                4.56,
+                2016,
+                Calendar.JANUARY,
+                3
+        );
+
+        long expenseModel2Id = this.databaseHandler.saveExpense(expenseModel2);
+
+        allExpenses = this.databaseHandler.getAllExpenses();
+        Assert.assertEquals("getAllExpenses always returns the correct number of results", 2, allExpenses.size());
+
+        for ( ExpenseModel expense: allExpenses) {
+
+            ExpenseModel matchingModel;
+
+            Assert.assertTrue("Each expense matches expense ID that we saved", (
+                    expense.getId() == expenseModel1Id ||
+                            expense.getId() == expenseModel2Id
+            ));
+
+            if (expense.getId() == expenseModel1Id) {
+                matchingModel = expenseModel1;
+            }
+            else {
+                matchingModel = expenseModel2;
+            }
+
+            Assert.assertEquals("Able to retrieve expense name correctly", matchingModel.getName(), expense.getName());
+            Assert.assertEquals("Able to retrieve expense amount correctly", matchingModel.getAmount(), expense.getAmount(), 0.001);
+            Assert.assertEquals("Able to retrieve expense yearIncurred correctly", matchingModel.getYearIncurred(), expense.getYearIncurred());
+            Assert.assertEquals("Able to retrieve expense monthIncurred correctly", matchingModel.getMonthIncurred(), expense.getMonthIncurred());
+            Assert.assertEquals("Able to retrieve expense dayIncurred correctly", matchingModel.getDayIncurred(), expense.getDayIncurred());
+            Assert.assertEquals("Able to retrieve expense yearCreated correctly", matchingModel.getYearCreated(), expense.getYearCreated());
+            Assert.assertEquals("Able to retrieve expense monthCreated correctly", matchingModel.getMonthCreated(), expense.getMonthCreated());
+            Assert.assertEquals("Able to retrieve expense dayCreated correctly", matchingModel.getDayCreated(), expense.getDayCreated());
+        }
+    }
 }

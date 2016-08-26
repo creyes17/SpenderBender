@@ -20,8 +20,13 @@ package reyes.r.christopher.spenderbender.persistence;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import reyes.r.christopher.spenderbender.model.ExpenseModel;
 
@@ -72,5 +77,34 @@ public class LocalDatabaseHandler extends SQLiteOpenHelper {
         formattedExpense.put(TransactionContract.DayCreated.getName(), expense.getDayCreated());
 
         return db.insert(TransactionContract.TableName, null, formattedExpense);
+    }
+
+    public List<ExpenseModel> getAllExpenses() {
+        List<ExpenseModel> allExpenses = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor expenses = db.query(TransactionContract.TableName, null, null, null, null, null, null);
+
+        expenses.moveToFirst();
+        while (! expenses.isAfterLast()) {
+            ExpenseModel next = new ExpenseModel(
+                    expenses.getString( expenses.getColumnIndexOrThrow(TransactionContract.TransactionName.getName())),
+                    expenses.getDouble( expenses.getColumnIndexOrThrow(TransactionContract.Amount.getName())),
+                    expenses.getInt( expenses.getColumnIndexOrThrow(TransactionContract.YearIncurred.getName())),
+                    expenses.getInt( expenses.getColumnIndexOrThrow(TransactionContract.MonthIncurred.getName())),
+                    expenses.getInt( expenses.getColumnIndexOrThrow(TransactionContract.DayIncurred.getName())),
+                    expenses.getInt( expenses.getColumnIndexOrThrow(TransactionContract.YearCreated.getName())),
+                    expenses.getInt( expenses.getColumnIndexOrThrow(TransactionContract.MonthCreated.getName())),
+                    expenses.getInt( expenses.getColumnIndexOrThrow(TransactionContract.DayCreated.getName())),
+                    expenses.getLong( expenses.getColumnIndexOrThrow(TransactionContract.PrimaryKey.getName()))
+            );
+            allExpenses.add(next);
+            expenses.moveToNext();
+        }
+
+        expenses.close();
+        db.close();
+        return allExpenses;
     }
 }
