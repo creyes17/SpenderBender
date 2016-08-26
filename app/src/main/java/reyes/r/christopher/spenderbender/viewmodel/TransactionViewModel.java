@@ -21,9 +21,11 @@ package reyes.r.christopher.spenderbender.viewmodel;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.List;
 
 import reyes.r.christopher.spenderbender.BR;
 import reyes.r.christopher.spenderbender.model.ExpenseModel;
@@ -44,6 +46,8 @@ public class TransactionViewModel extends BaseObservable {
     private int yearIncurred;
     private int monthIncurred;
     private int dayIncurred;
+
+    private List<ExpenseModel> expenseModelList = new ArrayList<>();
 
     private final HashSet<Integer> validMonths = new HashSet<>();
 
@@ -313,5 +317,15 @@ public class TransactionViewModel extends BaseObservable {
         }
 
         return Boolean.TRUE;
+    }
+
+    @Bindable
+    public List<ExpenseModel> getExpenseModelList() {
+        return this.expenseModelList;
+    }
+
+    public void loadAllExpenses() {
+        this.expenseModelList = this.dbh.getAllExpenses();
+        notifyPropertyChanged(BR.expenseModelList);
     }
 }
