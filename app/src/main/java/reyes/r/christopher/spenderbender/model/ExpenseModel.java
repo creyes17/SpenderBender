@@ -128,7 +128,8 @@ public class ExpenseModel {
      * This should only be called in the process of saving an expense to the database
      * @param id    The new value of the primary key which uniquely identifies this expense
      */
-    void setId(long id) {
+    public void setId(long id) {
+        // TODO: 8/25/16 Figure out a way to enforce that this is only called when it's saved to the database
         this.id = id;
     }
 }

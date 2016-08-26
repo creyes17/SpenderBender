@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import kotlin.NotImplementedError;
 import reyes.r.christopher.spenderbender.model.ExpenseModel;
 
 /**
@@ -64,7 +65,17 @@ public class LocalDatabaseHandler extends SQLiteOpenHelper {
         return result;
     }
 
+    /**
+     * Saves an expense to the given database. Modifies expense by setting its Id field!
+     * @param expense   The expense to save. Will be modified!
+     * @param db        The SQLite database into which to save the expense
+     * @return          The new ID of the expense
+     */
     public Long saveExpense(ExpenseModel expense, SQLiteDatabase db) {
+        if(expense.getId() != ExpenseModel.UNSAVED_EXPENSE) {
+            throw new IllegalArgumentException("Updating existed expenses is not yet supported!");
+        }
+
         ContentValues formattedExpense = new ContentValues();
 
         formattedExpense.put(TransactionContract.TransactionName.getName(), expense.getName());
@@ -76,7 +87,11 @@ public class LocalDatabaseHandler extends SQLiteOpenHelper {
         formattedExpense.put(TransactionContract.MonthCreated.getName(), expense.getMonthCreated());
         formattedExpense.put(TransactionContract.DayCreated.getName(), expense.getDayCreated());
 
-        return db.insert(TransactionContract.TableName, null, formattedExpense);
+        long newId = db.insert(TransactionContract.TableName, null, formattedExpense);
+
+        expense.setId(newId);
+
+        return newId;
     }
 
     public List<ExpenseModel> getAllExpenses() {

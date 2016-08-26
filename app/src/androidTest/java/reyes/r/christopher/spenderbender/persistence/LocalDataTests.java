@@ -18,12 +18,10 @@
 
 package reyes.r.christopher.spenderbender.persistence;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
-import android.provider.CalendarContract;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.RenamingDelegatingContext;
@@ -188,11 +186,15 @@ public class LocalDataTests {
                 22                  // day incurred
         );
 
+        Assert.assertEquals("Before saving, expense has UNSAVED id", ExpenseModel.UNSAVED_EXPENSE, expenseModel1.getId());
+
         long expense1Id = this.databaseHandler.saveExpense(expenseModel1, db);
 
         Assert.assertNotEquals("Can save Expense Model to database", -1, expense1Id);
 
         Assert.assertEquals("Saving expense creates a new row in the transaction table", 1, countStar.simpleQueryForLong());
+
+        Assert.assertEquals("Saving expense sets it's Id field", expense1Id, expenseModel1.getId());
 
         ExpenseModel expenseModel2 = new ExpenseModel(
                 "Lumiere Restaurant",   // name
@@ -202,11 +204,15 @@ public class LocalDataTests {
                 22                      // day incurred
         );
 
+        Assert.assertEquals("Before saving, expense has UNSAVED id", ExpenseModel.UNSAVED_EXPENSE, expenseModel2.getId());
+
         long expense2Id = this.databaseHandler.saveExpense(expenseModel2, db);
 
         Assert.assertNotEquals("Can save other expense to database", -1, expense2Id);
 
         Assert.assertEquals("Saving expense creates another new row in the transaction table", 2, countStar.simpleQueryForLong());
+
+        Assert.assertEquals("Saving expense sets it's Id field", expense2Id, expenseModel2.getId());
 
         // Check that rows in the database match the expenses we tried to save
 
@@ -269,17 +275,11 @@ public class LocalDataTests {
                     )
             );
 
-            Assert.assertTrue("Row ID matches expense 1 or 2", (( primaryKey == expense1Id ) || ( primaryKey == expense2Id )));
+            Assert.assertTrue("Row ID matches expense 1 or 2", (( primaryKey == expenseModel1.getId() ) || ( primaryKey == expenseModel2.getId() )));
 
             ExpenseModel modelToCompare;
 
-            if(
-                    expense1Id == expenses.getLong(
-                        expenses.getColumnIndex(
-                                TransactionContract.PrimaryKey.getName()
-                        )
-                    )
-            ) {
+            if( primaryKey == expenseModel1.getId() ) {
                 modelToCompare = expenseModel1;
             }
             else {
@@ -298,7 +298,54 @@ public class LocalDataTests {
             expenses.moveToNext();
         }
 
-        // TODO: 8/25/16 Add tests for saving expense when it already has id because of new constructor
+        ExpenseModel expenseModel3 = new ExpenseModel(
+                "Lumiere Restaurant",   // name
+                201.39,                 // amount
+                2014,                   // year incurred
+                Calendar.FEBRUARY,      // month incurred
+                22,                     // day incurred
+                2015,                   // year created
+                Calendar.OCTOBER,       // month created
+                31,                     // day created
+                55                      // Id
+        );
+
+        boolean caughtCorrectException = Boolean.FALSE;
+
+        try {
+            databaseHandler.saveExpense(expenseModel3);
+        } catch ( IllegalArgumentException e ) {
+            caughtCorrectException = Boolean.TRUE;
+        }
+
+        Assert.assertTrue("Cannot update an expense with an existing Id", caughtCorrectException);
+
+        ExpenseModel expenseModel4 = new ExpenseModel(
+                "Lumiere Restaurant",           // name
+                201.39,                         // amount
+                2014,                           // year incurred
+                Calendar.FEBRUARY,              // month incurred
+                22,                             // day incurred
+                2015,                           // year created
+                Calendar.OCTOBER,               // month created
+                31,                             // day created
+                ExpenseModel.UNSAVED_EXPENSE    // Id
+        );
+
+        caughtCorrectException = Boolean.FALSE;
+
+        long id4 = ExpenseModel.UNSAVED_EXPENSE;
+
+        try {
+            id4 = databaseHandler.saveExpense(expenseModel4);
+        } catch ( IllegalArgumentException e ) {
+            caughtCorrectException = Boolean.TRUE;
+        }
+
+        Assert.assertFalse("Can update an expense with an 'UNSAVED' Id", caughtCorrectException);
+
+        Assert.assertNotEquals("Doesn't save UNSAVED Id to database", ExpenseModel.UNSAVED_EXPENSE, id4);
+        Assert.assertEquals("Id becomes set when saving expense", id4, expenseModel4.getId());
 
         countStar.close();
         expenses.close();
