@@ -92,6 +92,13 @@ public class ExpenseModel {
         return this.amount;
     }
 
+    /**
+     * @return the amount of this expense, expressed as a string
+     */
+    public String getAmountAsString() {
+        return Double.toString(this.amount);
+    }
+
     public String getName() {
         return this.name;
     }
