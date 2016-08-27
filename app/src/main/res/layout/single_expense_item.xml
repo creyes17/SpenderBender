@@ -18,6 +18,11 @@
   -->
 
 <layout>
+    <data>
+        <variable
+            name="expense"
+            type="reyes.r.christopher.spenderbender.model.ExpenseModel"/>
+    </data>
     <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,18 +33,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/expenseListItemAmount"
+            android:text="@{expense.amountAsString}"
             android:gravity="start" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/expenseListItemName"
+            android:text="@{expense.name}"
             android:gravity="center_horizontal" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/expenseListItemDateIncurred"
+            android:text="@{expense.getShortDateIncurred(context)}"
             android:gravity="end" />
     </TableRow>
 </layout>
