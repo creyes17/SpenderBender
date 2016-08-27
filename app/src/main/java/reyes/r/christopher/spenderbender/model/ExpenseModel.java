@@ -18,7 +18,11 @@
 
 package reyes.r.christopher.spenderbender.model;
 
+import android.content.Context;
+import android.text.format.DateFormat;
+
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -40,6 +44,8 @@ public class ExpenseModel {
     private final int monthCreated;
     private final int dayCreated;
 
+    private final Calendar dateIncurred;
+
     /**
      * Creates an ExpenseModel for a new expense, setting the created timestamp to the current timestamp
      * @param name          A Description of the expense
@@ -54,6 +60,13 @@ public class ExpenseModel {
         this.yearIncurred = yearIncurred;
         this.monthIncurred = monthIncurred;
         this.dayIncurred = dayIncurred;
+
+        this.dateIncurred = (Calendar) Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault()).clone();
+        dateIncurred.set(
+                this.yearIncurred,
+                this.monthIncurred,
+                this.dayIncurred
+        );
 
         Calendar today = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
         this.yearCreated = today.get(Calendar.YEAR);
@@ -82,6 +95,14 @@ public class ExpenseModel {
         this.yearIncurred = yearIncurred;
         this.monthIncurred = monthIncurred;
         this.dayIncurred = dayIncurred;
+
+        this.dateIncurred = (Calendar) Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault()).clone();
+        dateIncurred.set(
+                this.yearIncurred,
+                this.monthIncurred,
+                this.dayIncurred
+        );
+
         this.yearCreated = yearCreated;
         this.monthCreated = monthCreated;
         this.dayCreated = dayCreated;
@@ -113,6 +134,13 @@ public class ExpenseModel {
 
     public int getDayIncurred() {
         return this.dayIncurred;
+    }
+
+    /**
+     * @return the date the expense was incurred, expressed as a short string in the default locale
+     */
+    public String getShortDateIncurred(Context context) {
+        return DateFormat.getDateFormat(context).format(new Date(this.dateIncurred.getTimeInMillis()));
     }
 
     public int getYearCreated() {
