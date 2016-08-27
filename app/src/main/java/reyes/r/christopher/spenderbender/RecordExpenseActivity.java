@@ -25,7 +25,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import reyes.r.christopher.spenderbender.databinding.RecordExpenseActivityBinding;
+import reyes.r.christopher.spenderbender.databinding.ActivityRecordExpenseBinding;
 import reyes.r.christopher.spenderbender.persistence.LocalDatabaseHandler;
 import reyes.r.christopher.spenderbender.viewmodel.TransactionViewModel;
 
@@ -38,7 +38,7 @@ public class RecordExpenseActivity extends AppCompatActivity {
         LocalDatabaseHandler dbh = new LocalDatabaseHandler(this);
         TransactionViewModel viewModel = new TransactionViewModel(dbh);
 
-        final RecordExpenseActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_record_expense);
+        final ActivityRecordExpenseBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_record_expense);
         binding.setViewModel(viewModel);
 
         Button submit = (Button) findViewById(R.id.submit);
