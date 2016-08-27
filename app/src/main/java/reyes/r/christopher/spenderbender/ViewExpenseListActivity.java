@@ -21,14 +21,62 @@ package reyes.r.christopher.spenderbender;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TableLayout;
 
-import reyes.r.christopher.spenderbender.databinding.ActivityRecordExpenseBinding;
+import java.util.List;
+
+import reyes.r.christopher.spenderbender.databinding.ActivityViewExpenseListBinding;
+import reyes.r.christopher.spenderbender.databinding.SingleExpenseItemBinding;
+import reyes.r.christopher.spenderbender.model.ExpenseModel;
+import reyes.r.christopher.spenderbender.persistence.LocalDatabaseHandler;
+import reyes.r.christopher.spenderbender.viewmodel.TransactionViewModel;
 
 public class ViewExpenseListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final ActivityRecordExpenseBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_view_expense_list);
+        ActivityViewExpenseListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_view_expense_list);
+
+        LocalDatabaseHandler dbh = new LocalDatabaseHandler(this);
+        TransactionViewModel viewModel = new TransactionViewModel(dbh);
+
+        /*binding.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable observable, int propertyId) {
+                TransactionViewModel sender = (TransactionViewModel) observable;
+                if (propertyId == BR.expenseModelList) {
+                    ViewExpenseListActivity.this.updateExpenseList(sender.getExpenseModelList());
+                }
+            }
+        });*/
+
+        binding.setViewModel(viewModel);
+        if ( BuildConfig.DEBUG ) {
+            if (viewModel == null) {
+                throw new AssertionError("Somehow viewModel is null...");
+            }
+            if(binding.getViewModel() == null) {
+                // This Assertion is always thrown
+                throw new AssertionError("viewModel is not null, but wasn't set in the binding");
+            }
+        }
+        // Throws NullPointerException
+        binding.getViewModel().loadAllExpenses();
+    }
+
+    private void updateExpenseList(List<ExpenseModel> expenses) {
+        TableLayout table = (TableLayout) findViewById(R.id.viewExpenseListTable);
+        assert table != null;
+
+        table.removeAllViews();
+
+        for (ExpenseModel expense :
+                expenses) {
+            SingleExpenseItemBinding binding = SingleExpenseItemBinding.inflate(getLayoutInflater());
+            binding.setExpense(expense);
+
+            table.addView(binding.getRoot());
+        }
     }
 }
