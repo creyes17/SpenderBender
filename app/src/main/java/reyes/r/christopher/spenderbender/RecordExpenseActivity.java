@@ -38,7 +38,7 @@ public class RecordExpenseActivity extends AppCompatActivity {
         LocalDatabaseHandler dbh = new LocalDatabaseHandler(this);
         TransactionViewModel viewModel = new TransactionViewModel(dbh);
 
-        final RecordExpenseActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.record_expense_activity);
+        final RecordExpenseActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_record_expense);
         binding.setViewModel(viewModel);
 
         Button submit = (Button) findViewById(R.id.submit);
