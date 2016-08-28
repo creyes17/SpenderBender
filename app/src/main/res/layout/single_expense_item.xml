@@ -34,14 +34,16 @@
             android:layout_height="wrap_content"
             android:id="@+id/expenseListItemAmount"
             android:text="@{expense.amountAsString}"
-            android:gravity="start" />
+            android:gravity="start"
+            android:paddingStart="@dimen/table_padding_start"
+            android:paddingEnd="@dimen/table_padding_end" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/expenseListItemName"
             android:text="@{expense.name}"
-            android:gravity="center_horizontal" />
+            />
 
         <TextView
             android:layout_width="wrap_content"

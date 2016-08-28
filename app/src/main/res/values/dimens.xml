@@ -17,16 +17,7 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/viewExpenseListTable"
-        android:shrinkColumns="*"
-        android:stretchColumns="*"
-        >
-    </TableLayout>
-</ScrollView>
+<resources>
+    <dimen name="table_padding_start">1dp</dimen>
+    <dimen name="table_padding_end">1dp</dimen>
+</resources>

@@ -18,7 +18,6 @@
 
 package reyes.r.christopher.spenderbender;
 
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TableLayout;
@@ -36,33 +35,13 @@ public class ViewExpenseListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityViewExpenseListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_view_expense_list);
+        setContentView(R.layout.activity_view_expense_list);
 
         LocalDatabaseHandler dbh = new LocalDatabaseHandler(this);
         TransactionViewModel viewModel = new TransactionViewModel(dbh);
 
-        /*binding.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable observable, int propertyId) {
-                TransactionViewModel sender = (TransactionViewModel) observable;
-                if (propertyId == BR.expenseModelList) {
-                    ViewExpenseListActivity.this.updateExpenseList(sender.getExpenseModelList());
-                }
-            }
-        });*/
-
-        binding.setViewModel(viewModel);
-        if ( BuildConfig.DEBUG ) {
-            if (viewModel == null) {
-                throw new AssertionError("Somehow viewModel is null...");
-            }
-            if(binding.getViewModel() == null) {
-                // This Assertion is always thrown
-                throw new AssertionError("viewModel is not null, but wasn't set in the binding");
-            }
-        }
-        // Throws NullPointerException
-        binding.getViewModel().loadAllExpenses();
+        viewModel.loadAllExpenses();
+        this.updateExpenseList(viewModel.getExpenseModelList());
     }
 
     private void updateExpenseList(List<ExpenseModel> expenses) {
