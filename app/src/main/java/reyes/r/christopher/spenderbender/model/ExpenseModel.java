@@ -21,6 +21,8 @@ package reyes.r.christopher.spenderbender.model;
 import android.content.Context;
 import android.text.format.DateFormat;
 
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -117,7 +119,9 @@ public class ExpenseModel {
      * @return the amount of this expense, expressed as a string
      */
     public String getAmountAsString() {
-        return Double.toString(this.amount);
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        formatter.setRoundingMode(RoundingMode.HALF_UP);
+        return formatter.format(this.amount);
     }
 
     public String getName() {

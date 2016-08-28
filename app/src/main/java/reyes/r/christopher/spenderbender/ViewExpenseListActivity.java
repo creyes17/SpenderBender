@@ -24,7 +24,6 @@ import android.widget.TableLayout;
 
 import java.util.List;
 
-import reyes.r.christopher.spenderbender.databinding.ActivityViewExpenseListBinding;
 import reyes.r.christopher.spenderbender.databinding.SingleExpenseItemBinding;
 import reyes.r.christopher.spenderbender.model.ExpenseModel;
 import reyes.r.christopher.spenderbender.persistence.LocalDatabaseHandler;

@@ -22,14 +22,17 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.mockito.internal.util.reflection.Whitebox;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by Christopher R Reyes on 8/17/16.
  */
 public class ExpenseModelTest {
     @Test
-    public void testLoadConstructor() {
+    public void testLoadConstructor() throws Exception {
         String name1 = "rent";
         Double amount1 = 3500.99;
 
@@ -105,7 +108,7 @@ public class ExpenseModelTest {
     }
 
     @Test
-    public void testCreateNewConstructor() {
+    public void testCreateNewConstructor() throws Exception {
         String name1 = "rent";
         Double amount1 = 3500.99;
 
@@ -149,8 +152,11 @@ public class ExpenseModelTest {
     }
 
     @Test
-    public void getAmountAsString() {
+    public void getAmountAsString() throws Exception {
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
+
         String name = "testName";
+
         int yearIncurred = 2000;
         int monthIncurred = Calendar.MAY;
         int dayIncurred = 29;
@@ -167,82 +173,82 @@ public class ExpenseModelTest {
 
         Assert.assertEquals("Test set up incorrectly: amount is not equal", amountToTest, expenseModel.getAmount(), 0.001);
 
-        Assert.assertEquals("Integer amounts are the same in string or double form", amountToTest, Double.valueOf(expenseModel.getAmountAsString()), 0.001);
+        Assert.assertEquals("Integer amounts are the same in string or double form", amountToTest, formatter.parse(expenseModel.getAmountAsString()).doubleValue(), 0.001);
 
         amountToTest = 1.0;
 
         Whitebox.setInternalState(expenseModel, "amount", amountToTest);
-        Assert.assertEquals("Whole number amounts are equivalent", amountToTest, Double.valueOf(expenseModel.getAmountAsString()), 0.001);
+        Assert.assertEquals("Whole number amounts are equivalent", amountToTest, formatter.parse(expenseModel.getAmountAsString()).doubleValue(), 0.001);
 
         amountToTest = 0.1;
 
         Whitebox.setInternalState(expenseModel, "amount", amountToTest);
-        Assert.assertEquals("Decimal amounts are equivalent", amountToTest, Double.valueOf(expenseModel.getAmountAsString()), 0.001);
+        Assert.assertEquals("Decimal amounts are equivalent", amountToTest, formatter.parse(expenseModel.getAmountAsString()).doubleValue(), 0.001);
 
         amountToTest = .1;
 
         Whitebox.setInternalState(expenseModel, "amount", amountToTest);
-        Assert.assertEquals("Decimal amounts are equivalent", amountToTest, Double.valueOf(expenseModel.getAmountAsString()), 0.001);
+        Assert.assertEquals("Decimal amounts are equivalent", amountToTest, formatter.parse(expenseModel.getAmountAsString()).doubleValue(), 0.001);
 
         amountToTest = 9.;
 
         Whitebox.setInternalState(expenseModel, "amount", amountToTest);
-        Assert.assertEquals("Decimal amounts are equivalent", amountToTest, Double.valueOf(expenseModel.getAmountAsString()), 0.001);
+        Assert.assertEquals("Decimal amounts are equivalent", amountToTest, formatter.parse(expenseModel.getAmountAsString()).doubleValue(), 0.001);
 
         amountToTest = -9.;
 
         Whitebox.setInternalState(expenseModel, "amount", amountToTest);
-        Assert.assertEquals("Negative decimal amounts are equivalent", amountToTest, Double.valueOf(expenseModel.getAmountAsString()), 0.001);
+        Assert.assertEquals("Negative decimal amounts are equivalent", amountToTest, formatter.parse(expenseModel.getAmountAsString()).doubleValue(), 0.001);
 
         amountToTest = -0.9;
 
         Whitebox.setInternalState(expenseModel, "amount", amountToTest);
-        Assert.assertEquals("Negative decimal amounts are equivalent", amountToTest, Double.valueOf(expenseModel.getAmountAsString()), 0.001);
+        Assert.assertEquals("Negative decimal amounts are equivalent", amountToTest, formatter.parse(expenseModel.getAmountAsString()).doubleValue(), 0.001);
 
         amountToTest = -0.0;
 
         Whitebox.setInternalState(expenseModel, "amount", amountToTest);
-        Assert.assertEquals("Zero is equivalent", amountToTest, Double.valueOf(expenseModel.getAmountAsString()), 0.001);
+        Assert.assertEquals("Zero is equivalent", amountToTest, formatter.parse(expenseModel.getAmountAsString()).doubleValue(), 0.001);
 
         amountToTest = 0.0;
 
         Whitebox.setInternalState(expenseModel, "amount", amountToTest);
-        Assert.assertEquals("Zero is equivalent", amountToTest, Double.valueOf(expenseModel.getAmountAsString()), 0.001);
+        Assert.assertEquals("Zero is equivalent", amountToTest, formatter.parse(expenseModel.getAmountAsString()).doubleValue(), 0.001);
 
         amountToTest = 0.;
 
         Whitebox.setInternalState(expenseModel, "amount", amountToTest);
-        Assert.assertEquals("Zero is equivalent", amountToTest, Double.valueOf(expenseModel.getAmountAsString()), 0.001);
+        Assert.assertEquals("Zero is equivalent", amountToTest, formatter.parse(expenseModel.getAmountAsString()).doubleValue(), 0.001);
 
         amountToTest = 0;
 
         Whitebox.setInternalState(expenseModel, "amount", amountToTest);
-        Assert.assertEquals("Zero is equivalent", amountToTest, Double.valueOf(expenseModel.getAmountAsString()), 0.001);
+        Assert.assertEquals("Zero is equivalent", amountToTest, formatter.parse(expenseModel.getAmountAsString()).doubleValue(), 0.001);
 
         amountToTest = .0;
 
         Whitebox.setInternalState(expenseModel, "amount", amountToTest);
-        Assert.assertEquals("Zero is equivalent", amountToTest, Double.valueOf(expenseModel.getAmountAsString()), 0.001);
+        Assert.assertEquals("Zero is equivalent", amountToTest, formatter.parse(expenseModel.getAmountAsString()).doubleValue(), 0.001);
 
         amountToTest = Double.MAX_VALUE;
 
         Whitebox.setInternalState(expenseModel, "amount", amountToTest);
-        Assert.assertEquals("Big amounts are equivalent", amountToTest, Double.valueOf(expenseModel.getAmountAsString()), 0.001);
+        Assert.assertEquals("Big amounts are equivalent", amountToTest, formatter.parse(expenseModel.getAmountAsString()).doubleValue(), 0.001);
 
         amountToTest = Double.MIN_VALUE;
 
         Whitebox.setInternalState(expenseModel, "amount", amountToTest);
-        Assert.assertEquals("Small amounts are equivalent", amountToTest, Double.valueOf(expenseModel.getAmountAsString()), 0.001);
+        Assert.assertEquals("Small amounts are equivalent", amountToTest, formatter.parse(expenseModel.getAmountAsString()).doubleValue(), 0.001);
 
         amountToTest = -1 * Double.MAX_VALUE;
 
         Whitebox.setInternalState(expenseModel, "amount", amountToTest);
-        Assert.assertEquals("Big negative amounts are equivalent", amountToTest, Double.valueOf(expenseModel.getAmountAsString()), 0.001);
+        Assert.assertEquals("Big negative amounts are equivalent", amountToTest, formatter.parse(expenseModel.getAmountAsString()).doubleValue(), 0.001);
 
         amountToTest = -1 * Double.MIN_VALUE;
 
         Whitebox.setInternalState(expenseModel, "amount", amountToTest);
-        Assert.assertEquals("Small negative amounts are equivalent", amountToTest, Double.valueOf(expenseModel.getAmountAsString()), 0.001);
+        Assert.assertEquals("Small negative amounts are equivalent", amountToTest, formatter.parse(expenseModel.getAmountAsString()).doubleValue(), 0.001);
     }
 
 }
