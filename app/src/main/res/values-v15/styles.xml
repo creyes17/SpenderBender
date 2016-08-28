@@ -43,6 +43,7 @@
         <item name="android:orientation">horizontal</item>
         <item name="android:shrinkColumns">1, 3</item>
         <item name="android:stretchColumns">2</item>
+        <item name="android:layout_marginBottom">@dimen/column_margin_small</item>
     </style>
 
     <style name="ViewSingleExpenseListElement.Name">
