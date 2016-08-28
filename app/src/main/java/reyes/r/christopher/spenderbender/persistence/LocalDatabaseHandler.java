@@ -25,10 +25,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-import kotlin.NotImplementedError;
 import reyes.r.christopher.spenderbender.model.ExpenseModel;
 
 /**

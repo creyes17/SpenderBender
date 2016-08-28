@@ -23,12 +23,13 @@ import org.junit.Test;
 import org.mockito.internal.util.reflection.Whitebox;
 
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Locale;
 
 /**
  * Created by Christopher R Reyes on 8/17/16.
+ *
+ * Tests the ExpenseModel methods
  */
 public class ExpenseModelTest {
     @Test
@@ -57,8 +58,6 @@ public class ExpenseModelTest {
                 dayCreated1,
                 id1
         );
-
-        Calendar today = Calendar.getInstance();
 
         Assert.assertEquals("Name should be set appropriately", name1, expenseModel1.getName());
         Assert.assertEquals("Amount incurred should be set appropriately", amount1, expenseModel1.getAmount());
