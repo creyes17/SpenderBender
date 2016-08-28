@@ -26,16 +26,28 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="ViewSingleExpenseListElement" parent="TextAppearance.AppCompat.Body2">
-        <item name="android:layout_width">wrap_content</item>
+    <style name="ViewExpenseListTable">
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:shrinkColumns">1, 3</item>
+        <item name="android:stretchColumns">2</item>
+        <item name="android:layout_marginLeft">@dimen/table_margin_start</item>
+        <item name="android:layout_marginRight">@dimen/table_margin_end</item>
     </style>
 
-    <style name="ViewSingleExpenseListElement.Currency">
-        <item name="android:gravity">right</item>
+    <style name="ViewSingleExpenseListRow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginLeft">@dimen/table_margin_start</item>
+        <item name="android:layout_marginRight">@dimen/table_margin_end</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:shrinkColumns">1, 3</item>
+        <item name="android:stretchColumns">2</item>
+        <item name="android:layout_marginBottom">@dimen/column_margin_small</item>
     </style>
 
-    <style name="ViewSingleExpenseListElement.Date">
-        <item name="android:gravity">right</item>
+    <style name="ViewSingleExpenseListElement.Name">
+        <item name="android:paddingLeft">@dimen/column_padding_large</item>
+        <item name="android:paddingRight">@dimen/column_padding_small</item>
     </style>
 </resources>

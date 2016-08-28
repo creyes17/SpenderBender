@@ -35,6 +35,7 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 
 import reyes.r.christopher.spenderbender.model.ExpenseModel;
@@ -55,7 +56,7 @@ public class LocalDataTests {
 
         File previousTestDatabaseIfExists = testContext.getDatabasePath(LocalDatabaseHandler.DatabaseName);
 
-        // As part of the setup, backup the existing database (if it exists), and then delete it
+        // As part of the setup, delete the existing test database if it exists
 
         Assert.assertTrue("Make sure we're working with a test database", previousTestDatabaseIfExists.getName().matches("^\\s*" + prefix + ".*$"));
         Assert.assertNotEquals("Make sure we haven't accidentally modified our tests to make the real database the test database", LocalDatabaseHandler.DatabaseName.toUpperCase(Locale.getDefault()), previousTestDatabaseIfExists.getName().toUpperCase(Locale.getDefault()));
@@ -185,11 +186,15 @@ public class LocalDataTests {
                 22                  // day incurred
         );
 
+        Assert.assertEquals("Before saving, expense has UNSAVED id", ExpenseModel.UNSAVED_EXPENSE, expenseModel1.getId());
+
         long expense1Id = this.databaseHandler.saveExpense(expenseModel1, db);
 
         Assert.assertNotEquals("Can save Expense Model to database", -1, expense1Id);
 
         Assert.assertEquals("Saving expense creates a new row in the transaction table", 1, countStar.simpleQueryForLong());
+
+        Assert.assertEquals("Saving expense sets it's Id field", expense1Id, expenseModel1.getId());
 
         ExpenseModel expenseModel2 = new ExpenseModel(
                 "Lumiere Restaurant",   // name
@@ -199,11 +204,15 @@ public class LocalDataTests {
                 22                      // day incurred
         );
 
+        Assert.assertEquals("Before saving, expense has UNSAVED id", ExpenseModel.UNSAVED_EXPENSE, expenseModel2.getId());
+
         long expense2Id = this.databaseHandler.saveExpense(expenseModel2, db);
 
         Assert.assertNotEquals("Can save other expense to database", -1, expense2Id);
 
         Assert.assertEquals("Saving expense creates another new row in the transaction table", 2, countStar.simpleQueryForLong());
+
+        Assert.assertEquals("Saving expense sets it's Id field", expense2Id, expenseModel2.getId());
 
         // Check that rows in the database match the expenses we tried to save
 
@@ -266,17 +275,11 @@ public class LocalDataTests {
                     )
             );
 
-            Assert.assertTrue("Row ID matches expense 1 or 2", (( primaryKey == expense1Id ) || ( primaryKey == expense2Id )));
+            Assert.assertTrue("Row ID matches expense 1 or 2", (( primaryKey == expenseModel1.getId() ) || ( primaryKey == expenseModel2.getId() )));
 
             ExpenseModel modelToCompare;
 
-            if(
-                    expense1Id == expenses.getLong(
-                        expenses.getColumnIndex(
-                                TransactionContract.PrimaryKey.getName()
-                        )
-                    )
-            ) {
+            if( primaryKey == expenseModel1.getId() ) {
                 modelToCompare = expenseModel1;
             }
             else {
@@ -295,9 +298,131 @@ public class LocalDataTests {
             expenses.moveToNext();
         }
 
+        ExpenseModel expenseModel3 = new ExpenseModel(
+                "Lumiere Restaurant",   // name
+                201.39,                 // amount
+                2014,                   // year incurred
+                Calendar.FEBRUARY,      // month incurred
+                22,                     // day incurred
+                2015,                   // year created
+                Calendar.OCTOBER,       // month created
+                31,                     // day created
+                55                      // Id
+        );
+
+        boolean caughtCorrectException = Boolean.FALSE;
+
+        try {
+            databaseHandler.saveExpense(expenseModel3);
+        } catch ( IllegalArgumentException e ) {
+            caughtCorrectException = Boolean.TRUE;
+        }
+
+        Assert.assertTrue("Cannot update an expense with an existing Id", caughtCorrectException);
+
+        ExpenseModel expenseModel4 = new ExpenseModel(
+                "Lumiere Restaurant",           // name
+                201.39,                         // amount
+                2014,                           // year incurred
+                Calendar.FEBRUARY,              // month incurred
+                22,                             // day incurred
+                2015,                           // year created
+                Calendar.OCTOBER,               // month created
+                31,                             // day created
+                ExpenseModel.UNSAVED_EXPENSE    // Id
+        );
+
+        caughtCorrectException = Boolean.FALSE;
+
+        long id4 = ExpenseModel.UNSAVED_EXPENSE;
+
+        try {
+            id4 = databaseHandler.saveExpense(expenseModel4);
+        } catch ( IllegalArgumentException e ) {
+            caughtCorrectException = Boolean.TRUE;
+        }
+
+        Assert.assertFalse("Can update an expense with an 'UNSAVED' Id", caughtCorrectException);
+
+        Assert.assertNotEquals("Doesn't save UNSAVED Id to database", ExpenseModel.UNSAVED_EXPENSE, id4);
+        Assert.assertEquals("Id becomes set when saving expense", id4, expenseModel4.getId());
+
         countStar.close();
         expenses.close();
         db.close();
     }
 
+    @Test
+    public void canGetAllExpenses() {
+        // Note: We assume that the saveExpense method has already been tested and works
+        Assert.assertEquals("When there are no expenses, getAllExpenses return an empty list", 0, this.databaseHandler.getAllExpenses().size());
+
+        ExpenseModel expenseModel1 = new ExpenseModel(
+                "thing1",
+                1.23,
+                2015,
+                Calendar.DECEMBER,
+                22
+        );
+
+        // Again, we assume that the saveExpense method has already been tested, and that this will add a row to the database
+        long expenseModel1Id = this.databaseHandler.saveExpense(expenseModel1);
+
+        List<ExpenseModel> allExpenses = this.databaseHandler.getAllExpenses();
+        Assert.assertEquals("With one expense saved, getAllExpenses returns that one expense", 1, allExpenses.size());
+
+        ExpenseModel modelToCompare = allExpenses.get(0);
+
+        Assert.assertEquals("Able to retrieve single expense name correctly", expenseModel1.getName(), modelToCompare.getName());
+        Assert.assertEquals("Able to retrieve single expense amount correctly", expenseModel1.getAmount(), modelToCompare.getAmount(), 0.001);
+        Assert.assertEquals("Able to retrieve single expense yearIncurred correctly", expenseModel1.getYearIncurred(), modelToCompare.getYearIncurred());
+        Assert.assertEquals("Able to retrieve single expense monthIncurred correctly", expenseModel1.getMonthIncurred(), modelToCompare.getMonthIncurred());
+        Assert.assertEquals("Able to retrieve single expense dayIncurred correctly", expenseModel1.getDayIncurred(), modelToCompare.getDayIncurred());
+        Assert.assertEquals("Able to retrieve single expense yearCreated correctly", expenseModel1.getYearCreated(), modelToCompare.getYearCreated());
+        Assert.assertEquals("Able to retrieve single expense monthCreated correctly", expenseModel1.getMonthCreated(), modelToCompare.getMonthCreated());
+        Assert.assertEquals("Able to retrieve single expense dayCreated correctly", expenseModel1.getDayCreated(), modelToCompare.getDayCreated());
+        Assert.assertEquals("Able to retrieve single expense id correctly", expenseModel1Id, modelToCompare.getId());
+
+        allExpenses = this.databaseHandler.getAllExpenses();
+        Assert.assertEquals("getAllExpenses always returns the correct number of results", 1, allExpenses.size());
+
+        ExpenseModel expenseModel2 = new ExpenseModel(
+                "thing2",
+                4.56,
+                2016,
+                Calendar.JANUARY,
+                3
+        );
+
+        long expenseModel2Id = this.databaseHandler.saveExpense(expenseModel2);
+
+        allExpenses = this.databaseHandler.getAllExpenses();
+        Assert.assertEquals("getAllExpenses always returns the correct number of results", 2, allExpenses.size());
+
+        for ( ExpenseModel expense: allExpenses) {
+
+            ExpenseModel matchingModel;
+
+            Assert.assertTrue("Each expense matches expense ID that we saved", (
+                    expense.getId() == expenseModel1Id ||
+                            expense.getId() == expenseModel2Id
+            ));
+
+            if (expense.getId() == expenseModel1Id) {
+                matchingModel = expenseModel1;
+            }
+            else {
+                matchingModel = expenseModel2;
+            }
+
+            Assert.assertEquals("Able to retrieve expense name correctly", matchingModel.getName(), expense.getName());
+            Assert.assertEquals("Able to retrieve expense amount correctly", matchingModel.getAmount(), expense.getAmount(), 0.001);
+            Assert.assertEquals("Able to retrieve expense yearIncurred correctly", matchingModel.getYearIncurred(), expense.getYearIncurred());
+            Assert.assertEquals("Able to retrieve expense monthIncurred correctly", matchingModel.getMonthIncurred(), expense.getMonthIncurred());
+            Assert.assertEquals("Able to retrieve expense dayIncurred correctly", matchingModel.getDayIncurred(), expense.getDayIncurred());
+            Assert.assertEquals("Able to retrieve expense yearCreated correctly", matchingModel.getYearCreated(), expense.getYearCreated());
+            Assert.assertEquals("Able to retrieve expense monthCreated correctly", matchingModel.getMonthCreated(), expense.getMonthCreated());
+            Assert.assertEquals("Able to retrieve expense dayCreated correctly", matchingModel.getDayCreated(), expense.getDayCreated());
+        }
+    }
 }

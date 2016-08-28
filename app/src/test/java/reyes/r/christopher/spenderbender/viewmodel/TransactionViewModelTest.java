@@ -804,7 +804,7 @@ public class TransactionViewModelTest {
     }
 
     @Test
-    public void addExpenseWithArgs() {
+    public void addExpenseWithArgs() throws Exception {
         MockDatabaseHandler testDbh = new MockDatabaseHandler();
 
         TransactionViewModel viewModel = new TransactionViewModel(testDbh);
@@ -901,6 +901,61 @@ public class TransactionViewModelTest {
         }
 
         Assert.assertTrue("Should not allow saving with invalid fields", threwExpectedException);
+    }
+
+    @Test
+    public void getAllExpenses() throws Exception {
+        LocalDatabaseHandler dbh = mock(LocalDatabaseHandler.class);
+        TransactionViewModel viewModel = new TransactionViewModel(dbh);
+
+        ArrayList<ExpenseModel> testExpenses = new ArrayList<>();
+        when(dbh.getAllExpenses()).thenReturn(testExpenses);
+
+        Assert.assertEquals("Before loading expenses, viewModel doesn't retrieve any expenses", 0, viewModel.getExpenseModelList().size());
+
+        viewModel.loadAllExpenses();
+
+        Assert.assertEquals("When there are no expenses in the database, then no expenses should be loaded", 0, viewModel.getExpenseModelList().size());
+
+        this.validExpenseModel1.setId(1);
+        testExpenses.add(this.validExpenseModel1);
+        viewModel.loadAllExpenses();
+
+        Assert.assertEquals("When there are expenses in the database, then those expenses should be loaded", 1, viewModel.getExpenseModelList().size());
+
+        ExpenseModel modelToCompare = viewModel.getExpenseModelList().get(0);
+        Assert.assertEquals("Loaded expense should have correct name", this.validExpenseModel1.getName(), modelToCompare.getName());
+        Assert.assertEquals("Loaded expense should have correct amount", this.validExpenseModel1.getAmount(), modelToCompare.getAmount(), 0.001);
+        Assert.assertEquals("Loaded expense should have correct yearIncurred", this.validExpenseModel1.getYearIncurred(), modelToCompare.getYearIncurred());
+        Assert.assertEquals("Loaded expense should have correct monthIncurred", this.validExpenseModel1.getMonthIncurred(), modelToCompare.getMonthIncurred());
+        Assert.assertEquals("Loaded expense should have correct dayIncurred", this.validExpenseModel1.getDayIncurred(), modelToCompare.getDayIncurred());
+        Assert.assertEquals("Loaded expense should have correct Id", this.validExpenseModel1.getId(), modelToCompare.getId());
+
+        this.validExpenseModel2.setId(2);
+        testExpenses.add(this.validExpenseModel2);
+        viewModel.loadAllExpenses();
+
+        Assert.assertEquals("When there are expenses in the database, then those expenses should be loaded", 2, viewModel.getExpenseModelList().size());
+
+        for (ExpenseModel expense :
+                viewModel.getExpenseModelList()) {
+            Assert.assertTrue("Expense is in list of saved Expenses", (
+                    expense.getId() == this.validExpenseModel1.getId() ||
+                            expense.getId() == this.validExpenseModel2.getId()
+            ));
+
+            if (expense.getId() == this.validExpenseModel1.getId()) {
+                modelToCompare = this.validExpenseModel1;
+            } else {
+                modelToCompare = this.validExpenseModel2;
+            }
+
+            Assert.assertEquals("Expense has correct name", modelToCompare.getName(), expense.getName());
+            Assert.assertEquals("Expense has correct amount", modelToCompare.getAmount(), expense.getAmount(), 0.001);
+            Assert.assertEquals("Loaded expense should have correct yearIncurred", modelToCompare.getYearIncurred(), expense.getYearIncurred());
+            Assert.assertEquals("Loaded expense should have correct monthIncurred", modelToCompare.getMonthIncurred(), expense.getMonthIncurred());
+            Assert.assertEquals("Loaded expense should have correct dayIncurred", modelToCompare.getDayIncurred(), expense.getDayIncurred());
+        }
     }
 
     private void setViewModelPrivateFields(TransactionViewModel viewModel, ExpenseModel expense) {

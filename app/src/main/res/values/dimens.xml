@@ -16,8 +16,11 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
+
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <dimen name="table_margin_start">7dp</dimen>
+    <dimen name="table_margin_end">7dp</dimen>
+    <dimen name="column_padding_large">20dp</dimen>
+    <dimen name="column_padding_small">2dp</dimen>
+    <dimen name="column_margin_small">5dp</dimen>
 </resources>
