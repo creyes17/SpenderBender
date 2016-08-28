@@ -26,11 +26,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ViewExpenseListTable">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:shrinkColumns">1, 3</item>
+        <item name="android:stretchColumns">2</item>
+        <item name="android:layout_marginStart">@dimen/table_margin_start</item>
+        <item name="android:layout_marginEnd">@dimen/table_margin_end</item>
+    </style>
+
     <style name="ViewSingleExpenseListRow">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:paddingStart">@dimen/table_padding_start</item>
-        <item name="android:paddingEnd">@dimen/table_padding_end</item>
+        <item name="android:layout_marginStart">@dimen/table_margin_start</item>
+        <item name="android:layout_marginEnd">@dimen/table_margin_end</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:shrinkColumns">1, 3</item>
         <item name="android:stretchColumns">2</item>
