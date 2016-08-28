@@ -24,32 +24,25 @@
             type="reyes.r.christopher.spenderbender.model.ExpenseModel"/>
     </data>
     <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
+        style="@style/ViewSingleExpenseListRow"
         >
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/ViewSingleExpenseListElement.Currency"
             android:id="@+id/expenseListItemAmount"
             android:text="@{expense.amountAsString}"
-            android:gravity="start"
-            android:paddingStart="@dimen/table_padding_start"
-            android:paddingEnd="@dimen/table_padding_end" />
+            />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/ViewSingleExpenseListElement.Name"
             android:id="@+id/expenseListItemName"
             android:text="@{expense.name}"
             />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/ViewSingleExpenseListElement.Date"
             android:id="@+id/expenseListItemDateIncurred"
             android:text="@{expense.getShortDateIncurred(context)}"
-            android:gravity="end" />
+            />
     </TableRow>
 </layout>
