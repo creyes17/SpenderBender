@@ -1,6 +1,7 @@
 # SpenderBender
 
 Latest Build Status: [![CircleCI](https://circleci.com/gh/creyes17/SpenderBender.svg?style=svg)](https://circleci.com/gh/creyes17/SpenderBender)
+
 Free Offline Budget Tracking App for Android
 
 Please see the conventions folder for code and style conventions if you'd like to contribute.
