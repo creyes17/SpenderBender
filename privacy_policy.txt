@@ -1,0 +1,11 @@
+SpenderBender is an Application that allows you to store numbers and associate them with metadata including dates and/or text.
+
+We understand that many users (ourselves included) will choose to use this Application to store sensitive financial records.
+
+It's important that you understand how your data is stored, and what is (and isn't) done with it. This should allow you to make a responsible, independent decision about what data you may choose to store using this Application.
+
+Your data will remain completely local to your device. You'll notice that the app doesn't require any network permissions. Your data will not be transmitted anywhere by the Application, nor will it be stored on any other device by the Application.
+
+Your data will NOT be encrypted as of this version. Anyone with technical expertise, access to your device, and a computer will be able to view any data you've stored on your device with the Application.
+
+As stated in the license (in slightly different words), use this Application at your own risk. It is provided completely without any warranty of any kind. Please see the License for more details.
