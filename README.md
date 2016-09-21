@@ -6,6 +6,8 @@ Free Offline Budget Tracking App for Android
 
 Please see the conventions folder for code and style conventions if you'd like to contribute.
 
+You can find the backlog at our Taiga site: https://tree.taiga.io/project/creyes17-spender-bender/backlog
+
 License:
 ```
 SpenderBender: A free offline budget tracking tool.
