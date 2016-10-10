@@ -24,4 +24,5 @@
     <string name="record_expense_submit_success">Successfully Saved Expense!</string>
     <string name="record_expense_submit_validation_failed">Failed to save expense. Invalid inputs</string>
     <string name="toolbar_list_expenses_name">View Expenses</string>
+    <string name="toolbar_add_expenses_name">Add Expenses</string>
 </resources>

@@ -18,8 +18,12 @@
 
 package reyes.r.christopher.spenderbender;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TableLayout;
 
 import java.util.List;
@@ -35,6 +39,12 @@ public class ViewExpenseListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_expense_list);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            toolbar.setTitle(R.string.app_name);
+            setSupportActionBar(toolbar);
+        }
 
         LocalDatabaseHandler dbh = new LocalDatabaseHandler(this);
         TransactionViewModel viewModel = new TransactionViewModel(dbh);
@@ -56,5 +66,19 @@ public class ViewExpenseListActivity extends AppCompatActivity {
 
             table.addView(binding.getRoot());
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.list_expense_toolbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.toolbar_add_expenses) {
+            startActivity(new Intent(this, RecordExpenseActivity.class));
+        }
+        return true;
     }
 }

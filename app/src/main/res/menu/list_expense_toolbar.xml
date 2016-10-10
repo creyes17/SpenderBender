@@ -22,8 +22,8 @@
 
     <!-- Should appear as action button -->
     <item
-        android:id="@+id/toolbar_list_expenses"
-        android:icon="@mipmap/list_launcher"
-        android:title="@string/toolbar_list_expenses_name"
+        android:id="@+id/toolbar_add_expenses"
+        android:icon="@mipmap/add_launcher"
+        android:title="@string/toolbar_add_expenses_name"
         app:showAsAction="always"/>
 </menu>

@@ -17,13 +17,23 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TableLayout
-        style="@style/ViewExpenseListTable"
-        android:id="@+id/viewExpenseListTable"
-        >
-    </TableLayout>
-</ScrollView>
+    <android.support.v7.widget.Toolbar
+        style="@style/ToolbarStyle"
+        android:id="@+id/toolbar" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+            style="@style/ViewExpenseListTable"
+            android:id="@+id/viewExpenseListTable"
+            >
+        </TableLayout>
+    </ScrollView>
+</LinearLayout>
