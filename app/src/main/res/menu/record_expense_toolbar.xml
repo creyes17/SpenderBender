@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ SpenderBender: A free offline budget tracking tool.
   ~ Copyright (c) 2016 Christopher R Reyes
@@ -15,13 +16,14 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<resources>
-    <string name="app_name">Spender Bender</string>
-    <string name="record_expense_amount_hint">How much was spent?</string>
-    <string name="record_expense_name_hint">On what was it spent?</string>
-    <string name="record_expense_date_incurred_content_description">The date it was spent</string>
-    <string name="record_expense_submit_button_text">Save Expense</string>
-    <string name="record_expense_submit_success">Successfully Saved Expense!</string>
-    <string name="record_expense_submit_validation_failed">Failed to save expense. Invalid inputs</string>
-    <string name="toolbar_list_expenses_name">View Expenses</string>
-</resources>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Should appear as action button if possible -->
+    <item
+        android:id="@+id/toolbar_list_expenses"
+        android:icon="@mipmap/list_launcher"
+        android:title="@string/toolbar_list_expenses_name"
+        app:showAsAction="always"/>
+</menu>

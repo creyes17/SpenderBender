@@ -18,11 +18,13 @@
 
 package reyes.r.christopher.spenderbender;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -37,17 +39,21 @@ public class RecordExpenseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Set up Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // Set up transactions
+        // Set up main activity
         LocalDatabaseHandler dbh = new LocalDatabaseHandler(this);
         TransactionViewModel viewModel = new TransactionViewModel(dbh);
 
         final ActivityRecordExpenseBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_record_expense);
         binding.setViewModel(viewModel);
 
+        // Set up Toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            //toolbar.setTitle(getString(R.string.app_name));
+            setSupportActionBar(toolbar);
+        }
+
+        // Set onClick handlers
         Button submit = (Button) findViewById(R.id.submit);
         assert submit != null;
 
@@ -66,5 +72,19 @@ public class RecordExpenseActivity extends AppCompatActivity {
                 Toast.makeText(RecordExpenseActivity.this, toastMessage, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.record_expense_toolbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.toolbar_list_expenses) {
+            startActivity(new Intent(this, ViewExpenseListActivity.class));
+        }
+        return true;
     }
 }
