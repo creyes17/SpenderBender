@@ -8,6 +8,8 @@ Please see the conventions folder for code and style conventions if you'd like t
 
 You can find the backlog at our Taiga site: https://tree.taiga.io/project/creyes17-spender-bender/backlog
 
+NOTE: I'm officially dropping this project as of April 1, 2017. I'll leave the code on github for future reference.
+
 License:
 ```
 SpenderBender: A free offline budget tracking tool.
