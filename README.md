@@ -1,7 +1,14 @@
 # SpenderBender
+
+Latest Build Status: [![CircleCI](https://circleci.com/gh/creyes17/SpenderBender.svg?style=svg)](https://circleci.com/gh/creyes17/SpenderBender)
+
 Free Offline Budget Tracking App for Android
 
 Please see the conventions folder for code and style conventions if you'd like to contribute.
+
+You can find the backlog at our Taiga site: https://tree.taiga.io/project/creyes17-spender-bender/backlog
+
+NOTE: I'm officially dropping this project as of April 1, 2017. I'll leave the code on github for future reference.
 
 License:
 ```
